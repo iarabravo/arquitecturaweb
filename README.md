@@ -1,7 +1,7 @@
 # Sistema de Gestión Hotelera
 
 ## Descripción
-Este proyecto es una API RESTful diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
+Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
 
 * **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
 * **Habitaciones:** Gestionar la disponibilidad de habitaciones, sus características y precios.
