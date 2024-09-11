@@ -39,11 +39,11 @@ Clientes
     * Método: POST
     * Descripción: Crea un nuevo cliente.
     * Body:
-        {
+        `{
         "nombre": "Juan",
         "apellido": "Pérez",
         "email": "juan.perez@example.com",
         "telefono": "123456789",
         "direccion": "Calle Falsa 123"
-        }
+        }`
         
