@@ -7,3 +7,11 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 * **Habitaciones:** Gestionar la disponibilidad de habitaciones, sus características y precios.
 * **Clientes:** Registrar y administrar la información de los clientes.
 * **Facturas:** Generar facturas por las estancias de los clientes.
+
+## Modelado de Datos (DER)
+* El modelo de datos incluye las siguientes entidades:
+
+* Clientes: Información del cliente (ID, nombre, apellido, dirección, etc.)
+* Habitaciones: Detalles de las habitaciones (ID, tipo, precio, estado de disponibilidad, etc.)
+* Reservas: Información sobre las reservas (ID, ID del cliente, ID de la habitación, fechas de check-in y check-out, estado, etc.)
+* Facturas: Detalles de las facturas generadas (ID, ID de la reserva, monto total, fecha de emisión, etc.)
