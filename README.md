@@ -57,6 +57,14 @@ Clientes
             "telefono": "123456789",
             "direccion": "Calle Falsa 123"
             }`
+    * Respuesta error:
+        * Código: 400 Bad Request
+        * Descripción: Los datos proporcionados en la solicitud son inválidos o incompletos.
+        * Body:
+            `{
+            "error": "Los datos del cliente son incompletos o inválidos.",
+            "details": "El campo 'email' es obligatorio."
+            }`
 
 * Obtener todos los clientes
     * URL: /api/clientes
@@ -72,6 +80,14 @@ Clientes
                 "email": "juan.perez@example.com",
                 "telefono": "123456789",
                 "direccion": "Calle Falsa 123"
+            }`
+    * Respuesta error:
+        * Código: 500 Internal Server Error
+        * Descripción: Error al recuperar los datos de la base de datos.
+        * Body:
+            `{
+            "error": "No se pudo recuperar la lista de clientes.",
+            "details": "Error en la base de datos."
             }`
 
 Reservas
@@ -97,6 +113,14 @@ Reservas
             "fechaFin": "2024-09-20",
             "estado": "confirmada"
             }`
+    * Respuesta error:
+        * Código: 400 Bad Request
+        * Descripción: Los datos de la reserva son inválidos o la habitación no está disponible.
+        * Body:
+            `{
+            "error": "Datos de la reserva inválidos o habitación no disponible.",
+            "details": "La habitación seleccionada ya está reservada para las fechas especificadas."
+            }`
 
 Habitaciones
 * Obtener todas las habitaciones disponibles
@@ -111,6 +135,14 @@ Habitaciones
                 "tipo": "Simple",
                 "precio": 100.0,
                 "disponible": true
+            }`
+    * Respuesta error:
+        * Código: 500 Internal Server Error
+        * Descripción: Error al recuperar la lista de habitaciones.
+        * Body:
+            `{
+            "error": "No se pudo recuperar la lista de habitaciones disponibles.",
+            "details": "Error en la base de datos."
             }`
     
 Facturas
@@ -131,4 +163,12 @@ Facturas
             "reservaId": 1,
             "montoTotal": 500.0,
             "fechaEmision": "2024-09-16"
+            }`
+    * Respuesta error:
+        * Código: 400 Bad Request
+        * Descripción: Datos inválidos para la generación de la factura.
+        * Body:
+            `{
+            "error": "Datos inválidos para la generación de la factura.",
+            "details": "La reserva especificada no existe o el monto total es incorrecto."
             }`
