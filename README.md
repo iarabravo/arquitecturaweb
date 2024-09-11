@@ -3,13 +3,13 @@
 ## _Descripción_
 Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
 
-* **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
-* **Habitaciones:** Gestionar la disponibilidad de habitaciones, sus características y precios.
-* **Clientes:** Registrar y administrar la información de los clientes.
-* **Facturas:** Generar facturas por las estancias de los clientes.
+1. **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
+2. **Habitaciones:** Gestionar la disponibilidad de habitaciones, sus características y precios.
+3. **Clientes:** Registrar y administrar la información de los clientes.
+4. **Facturas:** Generar facturas por las estancias de los clientes.
 
 ## _Modelado de Datos (DER)_
-* El modelo de datos incluye las siguientes entidades:
+El modelo de datos incluye las siguientes entidades:
 
 * Clientes: Información del cliente (ID, nombre, apellido, dirección, etc.)
 * Habitaciones: Detalles de las habitaciones (ID, tipo, precio, estado de disponibilidad, etc.)
