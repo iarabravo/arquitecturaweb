@@ -1,4 +1,5 @@
 # __Sistema de Gestión Hotelera__
+![hotel](https://rockonrr.com/wp-content/uploads/2021/02/Booking-Appointment.png)
 
 ## _Descripción_
 Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
