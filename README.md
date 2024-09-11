@@ -18,7 +18,7 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 
 ## Estructura de Clases (OOP)
 * Clases Principales
-* * Cliente:
+    * Cliente:
 * * * Atributos: id, nombre, apellido, email, telefono, direccion
 * * * Métodos: registrar(), actualizar(), eliminar()
 * * Habitacion:
