@@ -31,7 +31,7 @@ Clases Principales
         * Atributos: id, reservaId, montoTotal, fechaEmision
         * Métodos: generar(), actualizar()
 
-## Endpoints de la API
+### Endpoints de la API
 Clientes
 * Registrar cliente
     * URL: /api/clientes
@@ -45,4 +45,4 @@ Clientes
         "telefono": "123456789",
         "direccion": "Calle Falsa 123"
         }
-        
+
