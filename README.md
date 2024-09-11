@@ -18,20 +18,20 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 
 ## Estructura de Clases (OOP)
 Clases Principales
-    * Cliente:
-        * Atributos: id, nombre, apellido, email, telefono, direccion
-        * Métodos: registrar(), actualizar(), eliminar()
-    * Habitacion:
-        * Atributos: id, tipo, precio, disponible
-        * Métodos: actualizarDisponibilidad(), actualizarPrecio()
-    * Reserva:
-        * Atributos: id, clienteId, habitacionId, fechaInicio, fechaFin, estado
-        * Métodos: crear(), modificar(), cancelar()
-    * Factura:
-        * Atributos: id, reservaId, montoTotal, fechaEmision
-        * Métodos: generar(), actualizar()
+* Cliente:
+    * Atributos: id, nombre, apellido, email, telefono, direccion
+    * Métodos: registrar(), actualizar(), eliminar()
+* Habitacion:
+    * Atributos: id, tipo, precio, disponible
+    * Métodos: actualizarDisponibilidad(), actualizarPrecio()
+* Reserva:
+    * Atributos: id, clienteId, habitacionId, fechaInicio, fechaFin, estado
+    * Métodos: crear(), modificar(), cancelar()
+* Factura:
+    * Atributos: id, reservaId, montoTotal, fechaEmision
+    * Métodos: generar(), actualizar()
 
-### Endpoints de la API
+## Endpoints de la API
 Clientes
 * Registrar cliente
     * URL: /api/clientes
@@ -45,4 +45,4 @@ Clientes
         "telefono": "123456789",
         "direccion": "Calle Falsa 123"
         }
-
+        
