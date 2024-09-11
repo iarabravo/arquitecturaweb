@@ -17,7 +17,7 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 * Facturas: Detalles de las facturas generadas (ID, ID de la reserva, monto total, fecha de emisión, etc.)
 
 ## Estructura de Clases (OOP)
-* Clases Principales
+Clases Principales
     * Cliente:
         * Atributos: id, nombre, apellido, email, telefono, direccion
         * Métodos: registrar(), actualizar(), eliminar()
@@ -30,3 +30,19 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
     * Factura:
         * Atributos: id, reservaId, montoTotal, fechaEmision
         * Métodos: generar(), actualizar()
+
+## Endpoints de la API
+Clientes
+* Registrar cliente
+    * URL: /api/clientes
+    * Método: POST
+    * Descripción: Crea un nuevo cliente.
+    * Body:
+        {
+        "nombre": "Juan",
+        "apellido": "Pérez",
+        "email": "juan.perez@example.com",
+        "telefono": "123456789",
+        "direccion": "Calle Falsa 123"
+        }
+        
