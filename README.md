@@ -46,4 +46,35 @@ Clientes
         "telefono": "123456789",
         "direccion": "Calle Falsa 123"
         }`
+    * Respuesta exitosa:
+        * Codigo: 201 Created
+        * Body:   
+            `{
+            "id": 1,
+            "nombre": "Juan",
+            "apellido": "Pérez",
+            "email": "juan.perez@example.com",
+            "telefono": "123456789",
+            "direccion": "Calle Falsa 123"
+            }`
+
+* Obtener todos los clientes
+    * URL: /api/clientes
+    * Método: GET
+    * Descripción: Devuelve una lista de todos los clientes.
+    * Respuesta exitosa:
+        * Codigo: 200 OK
+        * Body: 
+            `{
+                "id": 1,
+                "nombre": "Juan",
+                "apellido": "Pérez",
+                "email": "juan.perez@example.com",
+                "telefono": "123456789",
+                "direccion": "Calle Falsa 123"
+            }`
+
+
+
+
         
