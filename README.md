@@ -1,6 +1,6 @@
 # Sistema de Gestión Hotelera
 
-## Descripción
+## _Descripción_
 Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
 
 * **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
