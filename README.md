@@ -1,4 +1,4 @@
-# Sistema de Gestión Hotelera
+# __Sistema de Gestión Hotelera__
 
 ## _Descripción_
 Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
@@ -8,7 +8,7 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 * **Clientes:** Registrar y administrar la información de los clientes.
 * **Facturas:** Generar facturas por las estancias de los clientes.
 
-## Modelado de Datos (DER)
+## _Modelado de Datos (DER)_
 * El modelo de datos incluye las siguientes entidades:
 
 * Clientes: Información del cliente (ID, nombre, apellido, dirección, etc.)
@@ -16,7 +16,7 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 * Reservas: Información sobre las reservas (ID, ID del cliente, ID de la habitación, fechas de check-in y check-out, estado, etc.)
 * Facturas: Detalles de las facturas generadas (ID, ID de la reserva, monto total, fecha de emisión, etc.)
 
-## Estructura de Clases (OOP)
+## _Estructura de Clases (OOP)_
 Clases Principales
 * Cliente:
     * Atributos: id, nombre, apellido, email, telefono, direccion
@@ -31,7 +31,7 @@ Clases Principales
     * Atributos: id, reservaId, montoTotal, fechaEmision
     * Métodos: generar(), actualizar()
 
-## Endpoints de la API
+## _Endpoints de la API_
 Clientes
 * Registrar cliente
     * URL: /api/clientes
