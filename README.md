@@ -74,7 +74,61 @@ Clientes
                 "direccion": "Calle Falsa 123"
             }`
 
+Reservas
+* Crear reserva
+    * URL: /api/reservas
+    * Método: POST
+    * Descripción: Crea una nueva reserva de habitación.
+    * Body:
+        `{
+        "clienteId": 1,
+        "habitacionId": 2,
+        "fechaInicio": "2024-09-15",
+        "fechaFin": "2024-09-20"
+        }`
+    * Respuesta exitosa:
+        * Código: 201 Created
+        * Body:
+            `{
+            "id": 1,
+            "clienteId": 1,
+            "habitacionId": 2,
+            "fechaInicio": "2024-09-15",
+            "fechaFin": "2024-09-20",
+            "estado": "confirmada"
+            }`
 
-
-
-        
+Habitaciones
+* Obtener todas las habitaciones disponibles
+    * URL: /api/habitaciones/disponibles
+    * Método: GET
+    * Descripción: Devuelve una lista de todas las habitaciones disponibles.
+    * Respuesta exitosa:
+        * Código: 200 OK
+        * Body:
+            `{
+                "id": 1,
+                "tipo": "Simple",
+                "precio": 100.0,
+                "disponible": true
+            }`
+    
+Facturas
+* Generar factura
+    * URL: /api/facturas
+    * Método: POST
+    * Descripción: Genera una factura para una reserva específica.
+    * Body:
+        `{
+        "reservaId": 1,
+        "montoTotal": 500.0
+        }`
+    * Respuesta exitosa:
+        * Código: 201 Created
+        * Body:
+            `{
+            "id": 1,
+            "reservaId": 1,
+            "montoTotal": 500.0,
+            "fechaEmision": "2024-09-16"
+            }`
