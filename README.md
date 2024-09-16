@@ -172,3 +172,4 @@ Facturas
             "error": "Datos inválidos para la generación de la factura.",
             "details": "La reserva especificada no existe o el monto total es incorrecto."
             }`
+
