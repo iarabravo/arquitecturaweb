@@ -1,5 +1,6 @@
 const express = require ("express");
 const morgan = require ("morgan");
+const database = require ("./database");
 
 //Configuration inicial
 const app = express();
@@ -12,7 +13,10 @@ console.log("Escuchando comunicaciones al puerto "+app.get("port"));
 app.use(morgan("dev"));
 
 //Rutas
-app.get("/productos",(req,res)=>
+app.get("/habitaciones",async(req,res)=>
 {
-    res.send("Mensaje recibido")
+    const connection = await database.getConnection();
+    const result = await connection.query("SELECT * FROM HABITACION");
+    console.log(result)
+    res.json()
 })
