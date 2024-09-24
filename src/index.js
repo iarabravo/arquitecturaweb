@@ -21,8 +21,7 @@ app.get('/', function(request, response) {
     response.send("server funcionando!!");
 });
 
-app.get("/habitaciones",async(req,res)=>
-{
+app.get("/habitaciones", async (req, res) => {
     console.log("Ruta /habitaciones llamada"); // Verificar llamada a la ruta
     const connection = await database.getConnection();
     console.log("Conexión a la base de datos establecida"); // Verificar conexión
@@ -32,47 +31,64 @@ app.get("/habitaciones",async(req,res)=>
     console.log("Tipo de habitación recibido: ", tipo); // Verificar tipo recibido
     console.log("ID de habitación recibido: ", id); // Verificar ID recibido
     console.log("Disponibilidad recibida: ", disponible); // Verificar disponibilidad recibida
+
     let query = "SELECT * FROM HABITACION";
     const params = [];
+    const conditions = [];
+
     // Verificar si se proporciona un ID o tipo
     if (id) {
-        query += " WHERE id = ?";
+        conditions.push("id = ?");
         params.push(id);
         console.log("Condición de ID añadida a la consulta"); // Verificar condición
-    } else if (tipo) {
-        query += " WHERE tipo = ?";
+    }
+
+    if (tipo) {
+        conditions.push("tipo = ?");
         params.push(tipo);
         console.log("Condición de tipo añadida a la consulta"); // Verificar condición
     }
-    if(disponible !=0 && disponible != 1)
-    {
-        return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
-        
+
+    // Validar el parámetro de disponibilidad solo si está definido
+    if (disponible !== undefined) {
+        // Asegurarse de que 'disponible' sea un valor numérico
+        if (disponible != 0 && disponible != 1) {
+            return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
+        } else {
+            conditions.push("disponible = ?");
+            params.push(disponible);
+            console.log("Condición de disponibilidad añadida a la consulta"); // Verificar condición
+        }
     }
-    if (disponible == 1) 
-    { // Asegurarse de que el parámetro está definido
-        query += " WHERE disponible = 1";
-        params.push(disponible);
-        console.log("Condición de disponibilidad añadida a la consulta"); // Verificar condición
-    } 
-    else if (disponible == 0) 
-    { 
-        query += " WHERE disponible = 0";
-        params.push(disponible);
-        console.log("Condición de no disponibilidad añadida a la consulta"); // Verificar condición
-    } 
+
+    // Si hay condiciones, las añadimos a la consulta
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
     try {
         console.log("Query: ", query); // Ver la consulta SQL
         console.log("Params: ", params); // Ver parámetros
 
         const result = await connection.query(query, params);
+
+        // Verificar si se encontraron resultados
+        if (result.length === 0) {
+            let errorMessage = "No se encontró ninguna habitación con";
+            if (id) {
+                errorMessage += ` ID: ${id}`;
+            }
+            if (tipo) {
+                errorMessage += ` Tipo: ${tipo}`;
+            }
+            return res.status(404).json({ error: errorMessage });
+        }
         res.set('Cache-Control', 'no-store');
         res.json(result);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     } 
-
 });
 
 app.post("/habitaciones",async(req, res) =>{
@@ -273,3 +289,64 @@ app.delete("/clientes", async (req, res) => {
     }
 });
 
+app.get("/reservas", async (req, res) => {
+    console.log("Ruta /reservas llamada"); // Verificar llamada a la ruta
+    const connection = await database.getConnection();
+    console.log("Conexión a la base de datos establecida"); // Verificar conexión
+    const id = req.query.id; // Parámetro para ID de reserva
+    const clienteId = req.query.clienteId; // Parámetro para clienteId
+    const habitacionId = req.query.habitacionId; // Parámetro para habitacionId
+    console.log("ID de reserva recibido: ", id); // Verificar ID recibido
+    console.log("ClienteID recibido: ", clienteId); // Verificar clienteId recibido
+    console.log("HabitacionID recibido: ", habitacionId); // Verificar habitacionId recibido
+    
+    let query = "SELECT * FROM reserva"; // Consulta base
+    const params = [];
+    const conditions = []; // Array para condiciones de filtrado
+
+    // Verificar si se proporciona un ID de reserva
+    if (id) {
+        conditions.push("id = ?");
+        params.push(id);
+        console.log("Condición de ID añadida a la consulta"); // Verificar condición
+    }
+
+    // Verificar si se proporciona un clienteId
+    if (clienteId) {
+        conditions.push("clienteId = ?");
+        params.push(clienteId);
+        console.log("Condición de clienteId añadida a la consulta"); // Verificar condición
+    }
+
+    // Verificar si se proporciona un habitacionId
+    if (habitacionId) {
+        conditions.push("habitacionId = ?");
+        params.push(habitacionId);
+        console.log("Condición de habitacionId añadida a la consulta"); // Verificar condición
+    }
+
+    // Si hay condiciones, las añadimos a la consulta
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    try {
+        console.log("Query: ", query); // Ver la consulta SQL
+        console.log("Params: ", params); // Ver parámetros
+
+        const result = await connection.query(query, params);
+
+        // Verificar si se encontraron resultados
+        if (result.length === 0) {
+            return res.status(404).json({ error: "No se encontraron reservas." });
+        }
+
+        res.set('Cache-Control', 'no-store');
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    } finally {
+        if (connection) connection.release(); // Liberar la conexión
+    }
+});
