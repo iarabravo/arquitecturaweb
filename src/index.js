@@ -32,19 +32,31 @@ app.get("/habitaciones", async (req, res) => {
     console.log("ID de habitación recibido: ", id); // Verificar ID recibido
     console.log("Disponibilidad recibida: ", disponible); // Verificar disponibilidad recibida
 
-    let query = "SELECT * FROM HABITACION";
+    // Construcción de la consulta
+    let query = `
+        SELECT h.*, 
+        CASE 
+            WHEN r.habitacionId IS NOT NULL THEN 0 
+            ELSE 1 
+        END AS disponible 
+        FROM HABITACION h 
+        LEFT JOIN reserva r ON h.id = r.habitacionId 
+        AND CURRENT_DATE >= r.fechaInicio 
+        AND CURRENT_DATE <= r.fechaFin
+    `;
+    
     const params = [];
     const conditions = [];
 
     // Verificar si se proporciona un ID o tipo
     if (id) {
-        conditions.push("id = ?");
+        conditions.push("h.id = ?");
         params.push(id);
         console.log("Condición de ID añadida a la consulta"); // Verificar condición
     }
 
     if (tipo) {
-        conditions.push("tipo = ?");
+        conditions.push("h.tipo = ?");
         params.push(tipo);
         console.log("Condición de tipo añadida a la consulta"); // Verificar condición
     }
@@ -55,8 +67,13 @@ app.get("/habitaciones", async (req, res) => {
         if (disponible != 0 && disponible != 1) {
             return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
         } else {
-            conditions.push("disponible = ?");
-            params.push(disponible);
+            if (disponible == 1) {
+                // Solo habitaciones disponibles
+                conditions.push("disponible = 1");
+            } else {
+                // Solo habitaciones no disponibles
+                conditions.push("disponible = 0");
+            }
             console.log("Condición de disponibilidad añadida a la consulta"); // Verificar condición
         }
     }
@@ -83,6 +100,7 @@ app.get("/habitaciones", async (req, res) => {
             }
             return res.status(404).json({ error: errorMessage });
         }
+        
         res.set('Cache-Control', 'no-store');
         res.json(result);
     } catch (error) {
@@ -346,7 +364,91 @@ app.get("/reservas", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-    } finally {
-        if (connection) connection.release(); // Liberar la conexión
+    } 
+});
+
+app.post("/reservas", async (req, res) => {
+    console.log("Ruta /reservas (POST) llamada");
+    const connection = await database.getConnection();
+
+    try {
+        console.log("Conexión a la base de datos establecida");
+
+        // Obtener los datos del cuerpo de la solicitud
+        const { clienteId, habitacionId, fechaInicio, fechaFin } = req.body;
+        console.log("Datos recibidos:", { clienteId, habitacionId, fechaInicio, fechaFin });
+
+        // Verifica si todos los campos necesarios están presentes
+        if (!clienteId || !habitacionId || !fechaInicio || !fechaFin) {
+            return res.status(400).json({ error: "Faltan datos requeridos: clienteId, habitacionId, fechaInicio y fechaFin son obligatorios." });
+        }
+
+        // Verificar si la habitación ya está reservada en el rango de fechas
+        const checkQuery = `
+            SELECT * FROM reserva 
+            WHERE habitacionId = ? 
+            AND (
+                (fechaInicio <= ? AND fechaFin >= ?) OR 
+                (fechaInicio <= ? AND fechaFin >= ?)
+            )
+        `;
+        const checkParams = [habitacionId, fechaFin, fechaInicio, fechaInicio, fechaInicio];
+        const existingReservation = await connection.query(checkQuery, checkParams);
+
+        if (existingReservation.length > 0) {
+            return res.status(400).json({ error: "La habitación ya está ocupada en las fechas seleccionadas." });
+        }
+
+        // Si la habitación está disponible, proceder a la creación de la reserva
+        const insertQuery = "INSERT INTO reserva (clienteId, habitacionId, fechaInicio, fechaFin) VALUES (?, ?, ?, ?)";
+        const insertParams = [clienteId, habitacionId, fechaInicio, fechaFin];
+        const result = await connection.query(insertQuery, insertParams);
+
+        // Cambiar el estado de la habitación a no disponible
+        const updateQuery = "UPDATE HABITACION SET disponible = 0 WHERE id = ?";
+        await connection.query(updateQuery, [habitacionId]);
+
+        res.status(201).json({ message: "Reserva creada exitosamente", id: result.insertId });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    } 
+});
+
+app.delete("/reservas/:id", async (req, res) => {
+    console.log("Ruta /reservas (DELETE) llamada");
+    const connection = await database.getConnection();
+    console.log("Conexión a la base de datos establecida");
+    try {
+        // Obtener el id de la reserva de los parámetros de la URL
+        const { id } = req.params;
+        console.log("ID de reserva recibido para borrar:", id);
+
+        // Verificar si el id está presente
+        if (!id) {
+            return res.status(400).json({ error: "Falta el ID de la reserva" });
+        }
+
+        // Comprobar si la reserva existe
+        const checkQuery = "SELECT * FROM reserva WHERE id = ?";
+        const existingReservation = await connection.query(checkQuery, [id]);
+
+        if (existingReservation.length === 0) {
+            return res.status(404).json({ error: "Reserva no encontrada" });
+        }
+
+        // Eliminar la reserva
+        const deleteQuery = "DELETE FROM reserva WHERE id = ?";
+        const result = await connection.query(deleteQuery, [id]);
+
+        // Cambiar el estado de la habitación a disponible
+        const habitacionId = existingReservation[0].habitacionId;
+        const updateQuery = "UPDATE HABITACION SET disponible = 1 WHERE id = ?";
+        await connection.query(updateQuery, [habitacionId]);
+
+        res.status(200).json({ message: "Reserva eliminada exitosamente" });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
