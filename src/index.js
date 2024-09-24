@@ -17,6 +17,9 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 //Rutas
+app.get('/', function(request, response) {
+    response.send("server funcionando!!");
+});
 
 app.get("/habitaciones",async(req,res)=>
 {
@@ -51,12 +54,38 @@ app.get("/habitaciones",async(req,res)=>
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     } 
 
-})
+});
 
-app.get('/', function(request, response) {
+app.post("/habitaciones",async(req, res) =>{
+    console.log("Ruta /habitaciones (POST) llamada");
+    connection = await database.getConnection();
 
-    response.send("server funcionando!!");
+    try {
+        console.log("Conexión a la base de datos establecida");
 
+        // Obtener los datos del cuerpo de la solicitud
+        const { tipo, precio} = req.body;
+        console.log("Datos recibidos:", { tipo, precio});
+
+        // Verifica si todos los campos necesarios están presentes
+        if (!tipo || !precio) {
+            return res.status(400).json({ error: "Faltan datos requeridos: tipo y precio son obligatorios." });
+        }
+        const disponible = 1;
+
+        // Construir la consulta SQL
+        const query = "INSERT INTO HABITACION (tipo,precio,disponible) VALUES (?, ?,?)";
+        const params = [tipo, parseFloat(precio), disponible];
+        console.log("Query: ", query);
+        console.log("Params: ", params);
+
+        // Ejecuta la consulta
+        const result = await connection.query(query, params);
+        res.status(201).json({ message: "Habitacion creada exitosamente", id: result.insertId });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    } 
 });
 
 app.get("/clientes",async(req,res)=>
@@ -73,11 +102,17 @@ app.get("/clientes",async(req,res)=>
         let query = "SELECT * FROM CLIENTE";
         const params = [];
         // Verificar si se proporciona un ID o dni
-        if (nombre) {
+        if (nombre && apellido || apellido && nombre) {
+            query += " WHERE nombre = ? AND apellido = ?";
+            params.push(nombre,apellido);
+            console.log("Condición de nombre y apellido añadida a la consulta"); // Verificar condición
+        }
+        else if (nombre) {
             query += " WHERE nombre = ?";
             params.push(nombre);
             console.log("Condición de nombre añadida a la consulta"); // Verificar condición
-        } else if (dni) {
+        }  
+        else if (dni) {
             query += " WHERE dni = ?";
             params.push(dni);
             console.log("Condición de dni añadida a la consulta"); // Verificar condición
@@ -91,16 +126,19 @@ app.get("/clientes",async(req,res)=>
             console.log("Params: ", params); // Ver parámetros
     
             const result = await connection.query(query, params);
+            if (result.length === 0) {
+                // Si no se encuentra, devolver mensaje de "no registrado"
+                return res.status(404).json({ message: "Cliente no registrado" });
+            }
             res.set('Cache-Control', 'no-store');
             res.json(result);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'Error en la consulta a la base de datos' });
         } 
-    
-    })
+});
 
-    app.post("/clientes", async (req, res) => {
+app.post("/clientes", async (req, res) => {
         console.log("Ruta /clientes (POST) llamada");
         connection = await database.getConnection();
 
@@ -129,9 +167,5 @@ app.get("/clientes",async(req,res)=>
             console.error("Error en la consulta a la base de datos:", error);
             res.status(500).json({ error: 'Error en la consulta a la base de datos' });
         } 
-    });
-    
-
-
-
-
+});
+   
