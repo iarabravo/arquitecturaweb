@@ -75,7 +75,7 @@ app.get("/clientes",async(req,res)=>
         // Verificar si se proporciona un ID o dni
         if (nombre) {
             query += " WHERE nombre = ?";
-            params.push(id);
+            params.push(nombre);
             console.log("Condición de nombre añadida a la consulta"); // Verificar condición
         } else if (dni) {
             query += " WHERE dni = ?";
