@@ -3,10 +3,10 @@ const dotenv = require ("dotenv");
 dotenv.config();
 
 const connection = mysql.createConnection({
-    host: process.env.host,
-    database: process.env.database,
-    user: process.env.user,
-    password: process.env.password
+    host: process.env.HOST,
+    database: process.env.DATABASE,
+    user: process.env.USER,
+    password: process.env.PASSWORD
 })
 
 const getConnection = async()=> await connection;
