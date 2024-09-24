@@ -28,8 +28,10 @@ app.get("/habitaciones",async(req,res)=>
     console.log("Conexión a la base de datos establecida"); // Verificar conexión
     const tipo = req.query.tipo; // Parámetro para tipo de habitación
     const id = req.query.id; // Parámetro para ID de habitación
+    const disponible = req.query.disponible; // Parámetro para disponibilidad
     console.log("Tipo de habitación recibido: ", tipo); // Verificar tipo recibido
     console.log("ID de habitación recibido: ", id); // Verificar ID recibido
+    console.log("Disponibilidad recibida: ", disponible); // Verificar disponibilidad recibida
     let query = "SELECT * FROM HABITACION";
     const params = [];
     // Verificar si se proporciona un ID o tipo
@@ -42,6 +44,23 @@ app.get("/habitaciones",async(req,res)=>
         params.push(tipo);
         console.log("Condición de tipo añadida a la consulta"); // Verificar condición
     }
+    if(disponible !=0 && disponible != 1)
+    {
+        return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
+        
+    }
+    if (disponible == 1) 
+    { // Asegurarse de que el parámetro está definido
+        query += " WHERE disponible = 1";
+        params.push(disponible);
+        console.log("Condición de disponibilidad añadida a la consulta"); // Verificar condición
+    } 
+    else if (disponible == 0) 
+    { 
+        query += " WHERE disponible = 0";
+        params.push(disponible);
+        console.log("Condición de no disponibilidad añadida a la consulta"); // Verificar condición
+    } 
     try {
         console.log("Query: ", query); // Ver la consulta SQL
         console.log("Params: ", params); // Ver parámetros
@@ -88,6 +107,40 @@ app.post("/habitaciones",async(req, res) =>{
     } 
 });
 
+app.delete("/habitaciones/:id", async (req, res) => {
+    console.log("Ruta /habitaciones (DELETE) llamada");
+    connection = await database.getConnection();
+    console.log("Conexión a la base de datos establecida");
+
+    try {
+        // Obtener el id de la habitación de los parámetros de la URL
+        const { id } = req.params;
+        console.log("ID de habitación recibido para borrar:", id);
+
+        // Verificar si el id está presente
+        if (!id) {
+            return res.status(400).json({ error: "Falta el ID de la habitación" });
+        }
+
+        // Construir la consulta SQL para eliminar la habitación por su id
+        const query = "DELETE FROM HABITACION WHERE id = ? AND disponible = 1";
+        console.log("Query:", query);
+
+        // Ejecutar la consulta
+        const result = await connection.query(query, [id]);
+
+        // Verificar si alguna fila fue afectada (si la habitación existía)
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Habitación no encontrada" });
+        }
+
+        res.status(200).json({ message: "Habitación eliminada exitosamente" });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
 app.get("/clientes",async(req,res)=>
     {
         console.log("Ruta /clientes llamada"); // Verificar llamada a la ruta
@@ -128,7 +181,7 @@ app.get("/clientes",async(req,res)=>
             const result = await connection.query(query, params);
             if (result.length === 0) {
                 // Si no se encuentra, devolver mensaje de "no registrado"
-                return res.status(404).json({ message: "Cliente no registrado" });
+                return res.status(404).json({ message: "Clientes no registrado" });
             }
             res.set('Cache-Control', 'no-store');
             res.json(result);
@@ -168,4 +221,55 @@ app.post("/clientes", async (req, res) => {
             res.status(500).json({ error: 'Error en la consulta a la base de datos' });
         } 
 });
-   
+
+app.delete("/clientes", async (req, res) => {
+    console.log("Ruta /clientes (DELETE) llamada");
+    connection = await database.getConnection();
+    console.log("Conexión a la base de datos establecida");
+    try {
+        // Obtener los datos de la solicitud (pueden ser enviados en los parámetros de consulta o en el cuerpo)
+        const { dni, nombre, apellido, id } = req.query;
+        console.log("Datos recibidos:", { dni, nombre, apellido, id });
+
+        // Verificar si al menos uno de los campos necesarios está presente
+        if (!dni && !(nombre && apellido) && !id) {
+            return res.status(400).json({ error: "Se requiere dni, nombre y apellido, o id para eliminar un cliente" });
+        }
+
+        // Construir la consulta SQL de forma dinámica
+        let query = "DELETE FROM CLIENTE WHERE";
+        const params = [];
+
+        // Eliminar por `id`
+        if (id) {
+            query += " id = ?";
+            params.push(id);
+        }
+        // Eliminar por `dni`
+        else if (dni) {
+            query += " dni = ?";
+            params.push(dni);
+        }
+        // Eliminar por `nombre y apellido`
+        else if (nombre && apellido) {
+            query += " nombre = ? AND apellido = ?";
+            params.push(nombre, apellido);
+        }
+
+        console.log("Query:", query);
+        console.log("Params:", params);
+
+        // Ejecutar la consulta
+        const result = await connection.query(query, params);
+
+        // Verificar si alguna fila fue afectada (si el cliente existía)
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+        }
+        res.status(200).json({ message: "Cliente eliminado exitosamente" });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
