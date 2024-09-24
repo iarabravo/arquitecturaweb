@@ -4,7 +4,7 @@
   "description": "![hotel](https://rockonrr.com/wp-content/uploads/2021/02/Booking-Appointment.png)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
