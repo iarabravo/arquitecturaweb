@@ -14,6 +14,7 @@ app.use(cors({
     origin: ["http://127.0.0.1:5501", "http://127.0.0.1:5500"]
 }))
 app.use(morgan("dev"));
+app.use(express.json());
 
 //Rutas
 
@@ -98,6 +99,38 @@ app.get("/clientes",async(req,res)=>
         } 
     
     })
+
+    app.post("/clientes", async (req, res) => {
+        console.log("Ruta /clientes (POST) llamada");
+        connection = await database.getConnection();
+
+        try {
+            console.log("Conexión a la base de datos establecida");
+    
+            // Obtener los datos del cuerpo de la solicitud
+            const { nombre, apellido, dni, email, telefono, direccion } = req.body;
+            console.log("Datos recibidos:", { nombre, apellido, dni, email, telefono, direccion });
+    
+            // Verifica si todos los campos necesarios están presentes
+            if (!nombre || !apellido || !dni) {
+                return res.status(400).json({ error: "Faltan datos requeridos: nombre, apellido y dni son obligatorios." });
+            }
+    
+            // Construir la consulta SQL
+            const query = "INSERT INTO CLIENTE (nombre, apellido, dni, email, telefono, direccion) VALUES (?, ?, ?, ?, ?, ?)";
+            const params = [nombre, apellido, dni, email, telefono, direccion];
+            console.log("Query: ", query);
+            console.log("Params: ", params);
+    
+            // Ejecuta la consulta
+            const result = await connection.query(query, params);
+            res.status(201).json({ message: "Cliente creado exitosamente", id: result.insertId });
+        } catch (error) {
+            console.error("Error en la consulta a la base de datos:", error);
+            res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+        } 
+    });
+    
 
 
 
