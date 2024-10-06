@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Web Design Hotel</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav>
+        <div class="nav__bar">
+          <div class="logo">
+            <a href="#"><img src="assets/image.png" alt="logo" /></a>
+          </div>
+          <div class="nav__menu__btn" id="menu-btn">
+            <i class="ri-menu-line"></i>
+          </div>
+        </div>
+        <ul class="nav__links" id="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">Nosotros</a></li>
+          <li><a href="#service">Servicios</a></li>
+          <li><a href="#explore">Explorar</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+        <button class="btn nav__btn">Reservar ahora</button>
+        <input type="checkbox" id="color-toggle">
+        <div class="display">
+          <label for="color-toggle">
+            <div class="circle">
+              <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+              </svg>
+              <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z" clip-rule="evenodd" />
+              </svg>                               
+            </div>
+          </label>
+        </div>
+      </nav>
+      
+      <div class="section__container header__container" id="home">
+        <p>Sencillo - Único - Amigable</p>
+        <h1>Tu Estancia Perfecta Comienza Aquí<br />En Nuestro <span>Hotel.</span></h1>
+      </div>
+    </header>
+  
+    <script>
+      const toggleSwitch = document.getElementById("color-toggle");
+      const body = document.body;
+      const aboutContainer = document.querySelector(".about__container");
+    
+      toggleSwitch.addEventListener("change", () => {
+        if (toggleSwitch.checked) {
+          // Tema oscuro
+          body.style.backgroundColor = "#202020"; // Fondo negro
+          body.style.color = "#FFFFFF"; // Texto blanco
+          aboutContainer.style.backgroundColor = "#202020"; // Fondo negro para About
+    
+          // Cambiar color de los enlaces
+          document.querySelectorAll('nav a').forEach(link => {
+            link.style.color = "#FFFFFF"; // Enlaces blancos
+          });
+          
+          // Cambiar color de los textos en about
+          aboutContainer.style.color = "#FFFFFF"; // Texto blanco en About
+    
+        } else {
+          // Tema claro
+          body.style.backgroundColor = "#FFFFFF"; // Fondo blanco
+          body.style.color = "#000000"; // Texto negro
+          aboutContainer.style.backgroundColor = ""; // Fondo original para About
+    
+          // Cambiar color de los enlaces
+          document.querySelectorAll('nav a').forEach(link => {
+            link.style.color = "#000000"; // Enlaces negros
+          });
+          
+          // Cambiar color de los textos en about
+          aboutContainer.style.color = ""; // Texto original en About
+        }
+      });
+    </script>
+    
+  </body>
+  
+
+    <section class="section__container booking__container">
+      <form action="/" class="booking__form">
+        <div class="input__group">
+          <span><i class="ri-calendar-2-fill"></i></span>
+          <div>
+            <label for="check-in">CHECK-IN</label>
+            <input type="text" placeholder="Check In" />
+          </div>
+        </div>
+        <div class="input__group">
+          <span><i class="ri-calendar-2-fill"></i></span>
+          <div>
+            <label for="check-out">CHECK-OUT</label>
+            <input type="text" placeholder="Check Out" />
+          </div>
+        </div>
+        <div class="input__group">
+          <span><i class="ri-user-fill"></i></span>
+          <div>
+            <label for="guest">PASAJEROS</label>
+            <input type="text" placeholder="Pasajeros" />
+          </div>
+        </div>
+        <div class="input__group input__btn">
+          <button class="btn">BUSCAR</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="section__container about__container" id="about">
+      <div class="about__image">
+        <img src="assets/about.jpg" alt="about" />
+      </div>
+      <div class="about__content">
+        <p class="section__subheader">SOBRE NOSOTROS</p>
+        <h2 class="section__header">¡Las mejores vacaciones comienzan aquí!</h2>
+        <p class="section__description">
+          Con un enfoque en alojamiento de calidad, experiencias personalizadas y reservas sin inconvenientes, 
+          nuestra plataforma está dedicada a garantizar que cada viajero se embarque en las vacaciones de sus 
+          sueños con confianza y emoción.
+        </p>
+        <div class="about__btn">
+          <button class="btn">Leer más</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container room__container">
+      <p class="section__subheader">NUESTRAS HABITACIONES</p>
+      <h2 class="section__header">El descanso más memorable comienza aquí.</h2>
+      <div class="room__grid">
+      <!-- HABITACION INDIVIDUAL -->
+        <div class="room__card">
+          <div class="room__card__image">
+            <img src="assets/simple.png" alt="room" />
+          </div>
+          <div class="room__card__details">
+            <h4>Habitación Simple: Confort y Funcionalidad</h4>
+            <p>
+              Ideal para viajeros solos, ofrece un espacio cómodo con cama, 
+              baño privado y todas las comodidades necesarias para un descanso tranquilo.
+            </p>
+            <h5>A partir de <span>$70.000 ARS/noche</span></h5>
+            <button class="btn">Reservar ahora</button>
+          </div>
+        </div>
+        <!-- HABITACION DOBLE -->
+        <div class="room__card">
+          <div class="room__card__image">
+            <img src="assets/doble.png" alt="room" />
+          </div>
+          <div class="room__card__details">
+            <h4>Habitación Doble: Comodidad para Dos en Camas Individuales</h4>
+            <p>
+              Ideal para compañeros de viaje, esta habitación ofrece dos camas individuales 
+              y un ambiente confortable, diseñado para una estancia tranquila.
+            </p>
+            <h5>A partir de <span>$110.000 ARS/noche</span></h5>
+            <button class="btn">Reservar ahora</button>
+          </div>
+        </div>
+        <!-- HABITACION FAMILIAR -->
+        <div class="room__card">
+          <div class="room__card__image">
+            <img src="assets/familiar.png" alt="room" />
+          </div>
+          <div class="room__card__details">
+            <h4>Habitación Familiar: Espacio para Todos</h4>
+            <p>
+              Perfecta para familias, cuenta con varias camas y espacio 
+              amplio para que todos disfruten de una estancia cómoda y agradable.
+            </p>
+            <h5>A partir de <span>$180.000 ARS/noche</span></h5>
+            <button class="btn">Reservar ahora</button>
+          </div>
+        </div>
+        <!-- HABITACION SUITE -->
+        <div class="room__card">
+          <div class="room__card__image">
+            <img src="assets/suite.png" alt="room" />
+          </div>
+          <div class="room__card__details">
+            <h4>Suite de Lujo: Exclusividad y Confort Superior</h4>
+            <p>
+              Disfruta del lujo con sala de estar, dormitorio y baño privado, 
+              en un ambiente exclusivo pensado para una experiencia memorable.
+            </p>
+            <h5>A partir de <span>$250.000 ARS/noche</span></h5>
+            <button class="btn">Reservar ahora</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <section class="service" id="service">
+      <div class="section__container service__container">
+        <div class="service__content">
+          <p class="section__subheader">SERVICIOS</p>
+          <h2 class="section__header">Esfuérzate sólo por lo mejor.</h2>
+          <ul class="service__list">
+            <li>
+              <span><i class="ri-shield-star-line"></i></span>
+              Seguridad de alta calidad
+            </li>
+            <li>
+              <span><i class="ri-24-hours-line"></i></span>
+              Servicio de habitaciones las 24 horas
+            </li>
+            <li>
+              <span><i class="ri-headphone-line"></i></span>
+              Sala de conferencias
+            </li>
+            <li>
+              <span><i class="ri-map-2-line"></i></span>
+              Soporte de guía turística
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section__container banner__container">
+      <div class="banner__content">
+        <div class="banner__card">
+          <h4>180+</h4>
+          <p>Habitaciones Disponibles</p>
+        </div>
+        <div class="banner__card">
+          <h4>500+</h4>
+          <p>Reservas completadas</p>
+        </div>
+        <div class="banner__card">
+          <h4>1200+</h4>
+          <p>Clientes satisfechos</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="explore" id="explore">
+      <p class="section__subheader">EXPLORAR</p>
+      <h2 class="section__header">¿Qué hay de nuevo hoy?</h2>
+      <div class="explore__bg">
+        <div class="explore__content">
+          <p class="section__description">06th OCT 2024</p>
+          <h4>Un nuevo menú está disponible en nuestro hotel.</h4>
+          <button class="btn">Continuar</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer" id="contact">
+      <div class="section__container footer__container">
+        <div class="footer__col">
+          <div class="logo">
+            <a href="#home"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+          <p class="section__description">
+            Descubra un mundo de comodidad, lujo y aventura mientras explora
+            nuestra cuidada selección de hoteles, haciendo que cada momento de su escapada
+            sea verdaderamente extraordinario.
+          </p>
+        </div>
+        <div class="footer__col">
+          <h4>ENLACES RÁPIDOS</h4>
+          <ul class="footer__links">
+            <li><a href="#">Explorar destinos</a></li>
+            <li><a href="#">Ofertas y paquetes especiales</a></li>
+            <li><a href="#">Tipos de habitaciones y comodidades</a></li>
+            <li><a href="#">Reseñas y valoraciones de clientes</a></li>
+            <li><a href="#">Consejos y guías de viaje</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>OTROS SERVICIOS</h4>
+          <ul class="footer__links">
+            <li><a href="#">Asistencia de conserjería</a></li>
+            <li><a href="#">Opciones de reserva flexibles</a></li>
+            <li><a href="#">Traslados al aeropuerto</a></li>
+            <li><a href="#">Bienestar y recreación</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>CONTÁCTENOS</h4>
+          <ul class="footer__links">
+            <li><a href="#">gladehotel@info.com.ar</a></li>
+          </ul>
+          <div class="footer__socials">
+            <a href="#"><img src="assets/facebook.png" alt="facebook" /></a>
+            <a href="#"><img src="assets/instagram.png" alt="instagram" /></a>
+            <!--<a href="#"><img src="assets/youtube.png" alt="youtube" /></a>
+            <a href="#"><img src="assets/twitter.png" alt="twitter" /></a>-->
+            <a href="#"><img src="assets/whatsapp.png" alt="whatsapp" /></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bar">
+        Copyright © 2023 Web Design Hotel. All rights reserved.
+      </div>
+    </footer>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

@@ -45,23 +45,19 @@ app.get("/habitaciones", async (req, res) => {
         AND CURRENT_DATE >= r.fechaInicio 
         AND CURRENT_DATE <= r.fechaFin
     `;
-    
     const params = [];
     const conditions = [];
-
     // Verificar si se proporciona un ID o tipo
     if (id) {
         conditions.push("h.id = ?");
         params.push(id);
         console.log("Condición de ID añadida a la consulta"); // Verificar condición
     }
-
     if (tipo) {
         conditions.push("h.tipo = ?");
         params.push(tipo);
         console.log("Condición de tipo añadida a la consulta"); // Verificar condición
     }
-
     // Validar el parámetro de disponibilidad solo si está definido
     if (disponible !== undefined) {
         // Asegurarse de que 'disponible' sea un valor numérico
@@ -78,12 +74,10 @@ app.get("/habitaciones", async (req, res) => {
             console.log("Condición de disponibilidad añadida a la consulta"); // Verificar condición
         }
     }
-
     // Si hay condiciones, las añadimos a la consulta
     if (conditions.length > 0) {
         query += " WHERE " + conditions.join(" AND ");
     }
-
     try {
         console.log("Query: ", query); // Ver la consulta SQL
         console.log("Params: ", params); // Ver parámetros
@@ -101,7 +95,6 @@ app.get("/habitaciones", async (req, res) => {
             }
             return res.status(404).json({ error: errorMessage });
         }
-        
         res.set('Cache-Control', 'no-store');
         res.json(result);
     } catch (error) {
