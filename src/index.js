@@ -369,38 +369,45 @@ app.post("/reservas", async (req, res) => {
         console.log("Conexión a la base de datos establecida");
 
         // Obtener los datos del cuerpo de la solicitud
-        const { clienteId, habitacionId, fechaInicio, fechaFin } = req.body;
-        console.log("Datos recibidos:", { clienteId, habitacionId, fechaInicio, fechaFin });
+        const { clienteId, tipoHabitacion, fechaInicio, fechaFin } = req.body;
+        console.log("Datos recibidos:", { clienteId, tipoHabitacion, fechaInicio, fechaFin });
 
         // Verifica si todos los campos necesarios están presentes
-        if (!clienteId || !habitacionId || !fechaInicio || !fechaFin) {
-            return res.status(400).json({ error: "Faltan datos requeridos: clienteId, habitacionId, fechaInicio y fechaFin son obligatorios." });
+        if (!clienteId || !tipoHabitacion || !fechaInicio || !fechaFin) {
+            return res.status(400).json({ error: "Faltan datos requeridos: clienteId, tipoHabitacion, fechaInicio y fechaFin son obligatorios." });
         }
 
-        // Verificar si la habitación ya está reservada en el rango de fechas
-        const checkQuery = `
-            SELECT * FROM reserva 
-            WHERE habitacionId = ? 
-            AND (
+        // Verificar habitaciones disponibles por tipo en el rango de fechas
+        const availableRoomsQuery = `
+            SELECT id FROM HABITACION 
+            WHERE tipo = ? 
+            AND disponible = 1 
+            AND id NOT IN (
+                SELECT habitacionId FROM reserva 
+                WHERE 
                 (fechaInicio <= ? AND fechaFin >= ?) OR 
                 (fechaInicio <= ? AND fechaFin >= ?)
             )
+            LIMIT 1
         `;
-        const checkParams = [habitacionId, fechaFin, fechaInicio, fechaInicio, fechaInicio];
-        const existingReservation = await connection.query(checkQuery, checkParams);
+        const availableRoomsParams = [tipoHabitacion, fechaFin, fechaInicio, fechaInicio, fechaInicio];
+        const availableRooms = await connection.query(availableRoomsQuery, availableRoomsParams);
 
-        if (existingReservation.length > 0) {
-            return res.status(400).json({ error: "La habitación ya está ocupada en las fechas seleccionadas." });
+        if (availableRooms.length === 0) {
+            return res.status(400).json({ error: "No hay habitaciones disponibles del tipo seleccionado en las fechas elegidas." });
         }
 
-        // Si la habitación está disponible, proceder a la creación de la reserva
+        // Tomar el primer ID de habitación disponible
+        const selectedRoomId = availableRooms[0].id;
+
+        // Si hay habitaciones disponibles, proceder a la creación de la reserva
         const insertQuery = "INSERT INTO reserva (clienteId, habitacionId, fechaInicio, fechaFin) VALUES (?, ?, ?, ?)";
-        const insertParams = [clienteId, habitacionId, fechaInicio, fechaFin];
+        const insertParams = [clienteId, selectedRoomId, fechaInicio, fechaFin];
         const result = await connection.query(insertQuery, insertParams);
 
         // Cambiar el estado de la habitación a no disponible
         const updateQuery = "UPDATE HABITACION SET disponible = 0 WHERE id = ?";
-        await connection.query(updateQuery, [habitacionId]);
+        await connection.query(updateQuery, [selectedRoomId]);
 
         res.status(201).json({ message: "Reserva creada exitosamente", id: result.insertId });
     } catch (error) {
@@ -408,6 +415,8 @@ app.post("/reservas", async (req, res) => {
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     } 
 });
+
+
 
 app.delete("/reservas/:id", async (req, res) => {
     console.log("Ruta /reservas (DELETE) llamada");
