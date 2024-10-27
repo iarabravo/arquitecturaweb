@@ -103,6 +103,7 @@ app.get("/habitaciones", async (req, res) => {
     } 
 });
 
+
 app.post("/habitaciones",async(req, res) =>{
     console.log("Ruta /habitaciones (POST) llamada");
     connection = await database.getConnection();
@@ -121,7 +122,7 @@ app.post("/habitaciones",async(req, res) =>{
         const disponible = 1;
 
         // Construir la consulta SQL
-        const query = "INSERT INTO HABITACION (tipo,precio,disponible) VALUES (?, ?,?)";
+        const query = "INSERT INTO HABITACION (tipo,precio,disponible,capacidad) VALUES (?, ?,?,?)";
         const params = [tipo, parseFloat(precio), disponible];
         console.log("Query: ", query);
         console.log("Params: ", params);
@@ -312,7 +313,12 @@ app.get("/reservas", async (req, res) => {
     console.log("ClienteID recibido: ", clienteId); // Verificar clienteId recibido
     console.log("HabitacionID recibido: ", habitacionId); // Verificar habitacionId recibido
     
-    let query = "SELECT * FROM reserva"; // Consulta base
+    let query = `
+        SELECT reserva.id, cliente.nombre, cliente.apellido, habitacion.tipo,reserva.fechaInicio,reserva.fechaFin
+        FROM reserva
+        JOIN cliente ON reserva.clienteId = cliente.id
+        JOIN habitacion ON reserva.habitacionId = habitacion.id
+    `;
     const params = [];
     const conditions = []; // Array para condiciones de filtrado
 
@@ -415,8 +421,6 @@ app.post("/reservas", async (req, res) => {
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     } 
 });
-
-
 
 app.delete("/reservas/:id", async (req, res) => {
     console.log("Ruta /reservas (DELETE) llamada");
