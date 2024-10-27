@@ -104,7 +104,7 @@ app.get("/habitaciones", async (req, res) => {
 });
 
 
-app.post("/habitaciones",async(req, res) =>{
+app.post("/habitaciones", async (req, res) => {
     console.log("Ruta /habitaciones (POST) llamada");
     connection = await database.getConnection();
 
@@ -112,28 +112,28 @@ app.post("/habitaciones",async(req, res) =>{
         console.log("Conexión a la base de datos establecida");
 
         // Obtener los datos del cuerpo de la solicitud
-        const { tipo, precio} = req.body;
-        console.log("Datos recibidos:", { tipo, precio});
+        const { tipo, precio, capacidad } = req.body;
+        console.log("Datos recibidos:", { tipo, precio, capacidad });
 
         // Verifica si todos los campos necesarios están presentes
-        if (!tipo || !precio) {
-            return res.status(400).json({ error: "Faltan datos requeridos: tipo y precio son obligatorios." });
+        if (!tipo || !precio || !capacidad) {
+            return res.status(400).json({ error: "Faltan datos requeridos: tipo, precio y capacidad son obligatorios." });
         }
         const disponible = 1;
 
         // Construir la consulta SQL
-        const query = "INSERT INTO HABITACION (tipo,precio,disponible,capacidad) VALUES (?, ?,?,?)";
-        const params = [tipo, parseFloat(precio), disponible];
+        const query = "INSERT INTO HABITACION (tipo, precio, disponible, capacidad) VALUES (?, ?, ?, ?)";
+        const params = [tipo, parseFloat(precio), disponible, capacidad];
         console.log("Query: ", query);
         console.log("Params: ", params);
 
         // Ejecuta la consulta
         const result = await connection.query(query, params);
-        res.status(201).json({ message: "Habitacion creada exitosamente", id: result.insertId });
+        res.status(201).json({ message: "Habitación creada exitosamente", id: result.insertId });
     } catch (error) {
         console.error("Error en la consulta a la base de datos:", error);
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-    } 
+    }
 });
 
 app.delete("/habitaciones/:id", async (req, res) => {
