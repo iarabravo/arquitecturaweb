@@ -179,5 +179,4 @@ Facturas
 ![Interfaz de Reservas](Frontend/assets/Pagina_Principal_1.PNG)
 ![Interfaz de Reservas](Frontend/assets/Pagina_Principal_2.PNG)
 ![Interfaz de Reservas](Frontend/assets/Pagina_Principal_3.PNG)
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_4.PNG)
 ![Interfaz de Reservas](Frontend/assets/Pagina_Principal_5.PNG)
