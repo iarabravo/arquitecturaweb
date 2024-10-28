@@ -17,7 +17,7 @@ El modelo de datos incluye las siguientes entidades:
 * Reservas: Información sobre las reservas (ID, ID del cliente, ID de la habitación, fechas de check-in y check-out, estado, etc.)
 * Facturas: Detalles de las facturas generadas (ID, ID de la reserva, monto total, fecha de emisión, etc.)
 
-## _Estructura de Clases (OOP)_
+## 🛠️ _Estructura de Clases (OOP)_
 Clases Principales
 * Cliente:
     * Atributos: id, nombre, apellido, email, telefono, direccion
@@ -32,7 +32,7 @@ Clases Principales
     * Atributos: id, reservaId, montoTotal, fechaEmision
     * Métodos: generar(), actualizar()
 
-## _Endpoints de la API_
+## 🗃️ _Endpoints de la API_
 Clientes
 * Registrar cliente
     * URL: /api/clientes
@@ -176,8 +176,17 @@ Facturas
 ## 🖼️ _Capturas de Pantalla del Progreso_
 
 ### 1. Página Principal
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_1.PNG)
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_2.PNG)
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_3.PNG)
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_6.PNG)
-![Interfaz de Reservas](Frontend/assets/Pagina_Principal_5.PNG)
+![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_1.PNG)
+![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_2.PNG)
+![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_3.PNG)
+![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_6.PNG)
+![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_5.PNG)
+
+### 2. Login para administrador
+![Login](Frontend/assets/Login.PNG)
+
+### 2. Página Principal para administrador
+![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Inicio.PNG)
+![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Habitaciones.PNG)
+![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Reservas.PNG)
+![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Clientes.PNG)
