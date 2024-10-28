@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="admin.css">
+    <script src="habitacionesService.js"></script>
+    <script src="clientesService.js"></script>
+    <script src="reservasService.js"></script>
+    <title>Admin Hotel Glade</title>
+</head>
+
+<body>
+    <!-- Loading -->
+    <div id="loading">Cargando...</div> <!-- Mensaje de carga -->
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="index.html" class="logo">
+            <i class='bx bxs-hotel' style='color:#112a49' ></i>
+            <div class="logo-name"><span>Glade</span></div>
+        </a>
+        <ul class="side-menu">
+            <li class="menu-item"><a href="#" onclick="showSection('inicio', this)"><i class='bx bxs-dashboard'></i>Inicio</a></li>
+            <li class="menu-item"><a href="#" onclick="showSection('habitaciones', this)"><i class='bx bxs-bed'></i>Habitaciones</a></li>
+            <li class="menu-item"><a href="#" onclick="showSection('reservas', this)"><i class='bx bxs-bell-ring'></i>Reservas</a></li>
+            <li class="menu-item"><a href="#" onclick="showSection('clientes', this)"><i class='bx bx-group'></i>Clientes</a></li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#" class="logout" id="logout-btn">
+                    <i class='bx bx-log-out-circle'></i>
+                    Cerrar Sesión
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Buscar...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+            <a href="#" class="notif">
+                <i class='bx bx-bell'></i>
+                <span class="count">12</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="assets/perfil.jpg">
+            </a>
+        </nav>
+
+        <main id="inicio" class="section active">
+            <div class="header active">
+                <div class="left active">
+                    <h1>Inicio</h1>
+                </div>
+            </div>
+            <div class="welcome-message">
+                <p>Bienvenido/a a la parte administrativa del sistema. Aquí puedes gestionar todas las funciones del hotel, incluyendo la visualización de reservas, el estado de disponibilidad de las habitaciones y el listado de clientes registrados.</p>
+            </div>
+        </main>
+
+        <main id="habitaciones" class="section">
+            <div class="header">
+                <div class="left">
+                    <h1>Habitaciones</h1>
+                </div>
+                <a href="#" class="report" id="agregar-habitacion">
+                    <i class='bx bxs-add-to-queue'></i>
+                    <span>Agregar Habitación</span>
+                </a>
+            </div>
+        
+            <!-- Insights -->
+            <ul class="insights">
+                <section id="habitaciones-container"></section>
+            </ul>
+        
+            <!-- Popup para agregar habitación -->
+            <div id="popup-agregar-habitacion" style="display:none;">
+                <div class="popup-content">
+                    <h2>Agregar Habitación</h2>
+                    <label for="tipo">Tipo de habitación:</label>
+                    <select id="tipo">
+                        <option value="">Seleccione</option>
+                        <option value="individual">Individual</option>
+                        <option value="doble">Doble</option>
+                        <option value="familiar">Familiar</option>
+                        <option value="suite">Suite</option>
+                    </select>
+                    <p id="precio">Precio: <span></span></p>
+                    <p id="capacidad">Capacidad: <span></span></p>
+                    <button onclick="agregarHabitacion()">Agregar</button>
+                    <button onclick="cerrarPopup()">Cerrar</button>
+                </div>
+            </div>
+        </main>
+    
+        <main id="reservas" class="section">
+            <div class="header">
+                <div class="left">
+                    <h1>Reservas</h1>
+                </div>
+            </div>
+            <!-- Insights -->
+            <section id="reservas-container">
+                <!-- Aquí se insertará la tabla dinámicamente -->
+            </section>
+        </main>
+
+        <main id="clientes" class="section">
+            <div class="header">
+                <div class="left">
+                    <h1>Clientes</h1>
+                </div>
+            </div>
+            <!-- Insights -->
+            <section id="clientes-container">
+                <!-- Aquí se insertará la tabla dinámicamente -->
+            </section>
+        </main>
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>

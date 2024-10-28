@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  .header {
+    background-color: #2c3e50;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .header .logo img {
+    width: 150px;
+  }
+  
+  .section__container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+  
+  .room__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .room__card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+  }
+  
+  .room__card__image img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .room__card__details {
+    padding: 1rem;
+  }
+  
+  .room__card__details h4 {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+  }
+  
+  .room__card__details p {
+    font-size: 1rem;
+    color: #7f8c8d;
+  }
+  
+  .room__card__details h5 {
+    font-size: 1.1rem;
+    color: #27ae60;
+  }
+  
+  .btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #c0392b;
+  }
+  

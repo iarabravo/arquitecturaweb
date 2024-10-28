@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="habitaciones.css" />
+    <script src="habitacionesService.js"></script>
+    <title>Habitaciones Hotel Glade</title>
+  </head>
+  <body>
+    <header class="header">
+      <nav>
+        <div class="nav__bar">
+          <div class="logo">
+            <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <section class="section__container rooms__available">
+      <h2>Habitaciones Disponibles</h2>
+      <div id="room-results" class="room__grid">
+        <!-- Las habitaciones se mostrarán aquí -->
+      </div>
+    </section>
+
+    <script>
+      // Función para obtener los parámetros de la URL
+      function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        const guestCounts = []; // Para almacenar la cantidad de pasajeros por habitación
+        const roomCount = params.get("rooms"); // Obtener el número de habitaciones
+    
+        // Recoger la cantidad de pasajeros para cada habitación
+        for (let i = 1; i <= roomCount; i++) {
+          const guestCount = params.get(`people-room-${i}`);
+          guestCounts.push(parseInt(guestCount, 10)); // Almacena el número de pasajeros
+        }
+    
+        // Devuelve todos los parámetros necesarios
+        return {
+          checkIn: params.get("check-in"),
+          checkOut: params.get("check-out"),
+          roomCount: parseInt(roomCount, 10),
+          guestCounts
+        };
+      }
+    
+// Función para mostrar las habitaciones según los parámetros
+async function displayRooms() {
+    const { checkIn, checkOut, roomCount, guestCounts } = getQueryParams();
+
+    // Calcular la cantidad total de pasajeros
+    const totalGuests = guestCounts.reduce((total, count) => total + count, 0);
+
+    // Convertir guestCounts a una cadena separada por comas para enviar al backend
+    const guestCountsString = guestCounts.join(',');
+
+    console.log("CheckIn:", checkIn);
+    console.log("CheckOut:", checkOut);
+    console.log("Total Guests:", totalGuests);
+    console.log("Guest Counts String:", guestCountsString); // Asegúrate de que se vea como esperas
+
+    try {
+        // Llamar a la función para obtener habitaciones desde el backend
+        const availableRooms = await getHabitaciones(checkIn, checkOut, guestCountsString);
+        const roomResults = document.getElementById("room-results");
+
+        // Generar HTML para las habitaciones disponibles
+        availableRooms.forEach(room => {
+            const roomCard = `
+              <div class="room__card">
+                <div class="room__card__image">
+                  <img src="${room.image}" alt="room" />
+                </div>
+                <div class="room__card__details">
+                  <h4>${room.tipo}</h4> <!-- Cambia según la estructura de tu respuesta -->
+                  <p>${room.description || "Descripción no disponible"}</p>
+                  <h5>A partir de <span>${room.price || "Precio no disponible"}</span></h5>
+                  <button class="btn">Reservar ahora</button>
+                </div>
+              </div>
+            `;
+            roomResults.innerHTML += roomCard;
+        });
+    } catch (error) {
+        console.error("Error al obtener habitaciones:", error);
+        const roomResults = document.getElementById("room-results");
+        roomResults.innerHTML = "<p>No se pudieron obtener las habitaciones disponibles. Intenta más tarde.</p>";
+    }
+}
+
+    </script>
+    
+    
+  </body>
+</html>
