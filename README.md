@@ -1,7 +1,7 @@
-# __Sistema de Gestión Hotelera__
+# __Sistema de Gestión Hotelera "Glade"__
 ![hotel](https://rockonrr.com/wp-content/uploads/2021/02/Booking-Appointment.png)
 
-## _Descripción_
+## 📋 _Descripción_
 Este proyecto es una API diseñada para gestionar las operaciones diarias de un hotel. Permite realizar tareas como:
 
 1. **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
@@ -9,7 +9,7 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 3. **Clientes:** Registrar y administrar la información de los clientes.
 4. **Facturas:** Generar facturas por las estancias de los clientes.
 
-## _Modelado de Datos (DER)_
+## 🗂️ _Modelado de Datos (DER)_
 El modelo de datos incluye las siguientes entidades:
 
 * Clientes: Información del cliente (ID, nombre, apellido, dirección, etc.)
