@@ -185,7 +185,7 @@ Facturas
 ### 2. Login para administrador
 ![Login](Frontend/assets/Login.PNG)
 
-### 2. Página Principal para administrador
+### 3. Página Principal para administrador
 ![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Inicio.PNG)
 ![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Habitaciones.PNG)
 ![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Reservas.PNG)
