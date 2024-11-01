@@ -61,41 +61,6 @@ ScrollReveal().reveal(".service__list li", {
   origin: "right",
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const roomsInput = document.getElementById("rooms");
-  const passengerContainer = document.getElementById("passenger-container");
-
-  // Función para actualizar el contenedor de pasajeros
-  function updatePassengerContainer() {
-      const roomCount = parseInt(roomsInput.value);
-      passengerContainer.innerHTML = ""; // Limpiar el contenedor
-
-      // Mostrar "Pasajeros" si hay al menos una habitación
-      if (roomCount > 0) {
-          const passengerLabel = document.createElement("h3");
-          passengerContainer.appendChild(passengerLabel);
-      }
-
-      for (let i = 1; i <= roomCount; i++) {
-          // Crear un nuevo grupo de entrada para cada habitación
-          const inputGroup = document.createElement("div");
-          inputGroup.className = "input__group";
-          inputGroup.innerHTML = `
-              <span><i class="ri-user-fill"></i></span>
-              <div>
-                  <label for="people-room${i}">PASAJEROS HABITACIÓN ${i}</label>
-                  <input type="number" name="people-room${i}" id="people-room${i}" min="1" max="4" value="1" required />
-              </div>
-          `;
-          passengerContainer.appendChild(inputGroup); // Agregar el nuevo grupo al contenedor
-      }
-  }
-  // Actualizar el contenedor al cargar la página
-  updatePassengerContainer();
-  // Escuchar cambios en el input de habitaciones
-  roomsInput.addEventListener("input", updatePassengerContainer);
-});
-
 toggleSwitch.addEventListener("change", () => {
   if (toggleSwitch.checked) {
     // Tema oscuro
