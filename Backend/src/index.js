@@ -115,7 +115,6 @@ app.get("/habitaciones", async (req, res) => {
     }
 });
 
-
 app.post("/habitaciones", async (req, res) => {
     console.log("Ruta /habitaciones (POST) llamada");
     connection = await database.getConnection();
