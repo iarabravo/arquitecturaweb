@@ -103,3 +103,38 @@ document.addEventListener("DOMContentLoaded", function () {
   // Escuchar cambios en el input de habitaciones
   roomsInput.addEventListener("input", updatePassengerContainer);
 });
+
+const toggleSwitch = document.getElementById("color-toggle");
+const body = document.body;
+const aboutContainer = document.querySelector(".about__container");
+
+toggleSwitch.addEventListener("change", () => {
+  if (toggleSwitch.checked) {
+    // Tema oscuro
+    body.style.backgroundColor = "#202020"; // Fondo negro
+    body.style.color = "#FFFFFF"; // Texto blanco
+    aboutContainer.style.backgroundColor = "#202020"; // Fondo negro para About
+
+    // Cambiar color de los enlaces
+    document.querySelectorAll('nav a').forEach(link => {
+      link.style.color = "#FFFFFF"; // Enlaces blancos
+    });
+    
+    // Cambiar color de los textos en about
+    aboutContainer.style.color = "#FFFFFF"; // Texto blanco en About
+
+  } else {
+    // Tema claro
+    body.style.backgroundColor = "#FFFFFF"; // Fondo blanco
+    body.style.color = "#000000"; // Texto negro
+    aboutContainer.style.backgroundColor = ""; // Fondo original para About
+
+    // Cambiar color de los enlaces
+    document.querySelectorAll('nav a').forEach(link => {
+      link.style.color = "#000000"; // Enlaces negros
+    });
+    
+    // Cambiar color de los textos en about
+    aboutContainer.style.color = ""; // Texto original en About
+  }
+});

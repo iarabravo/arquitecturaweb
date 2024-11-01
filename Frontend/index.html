@@ -48,44 +48,6 @@
         <h1>Tu Estancia Perfecta Comienza Aquí<br />En Nuestro <span>Hotel.</span></h1>
       </div>
     </header>
-  
-    <script>
-      const toggleSwitch = document.getElementById("color-toggle");
-      const body = document.body;
-      const aboutContainer = document.querySelector(".about__container");
-    
-      toggleSwitch.addEventListener("change", () => {
-        if (toggleSwitch.checked) {
-          // Tema oscuro
-          body.style.backgroundColor = "#202020"; // Fondo negro
-          body.style.color = "#FFFFFF"; // Texto blanco
-          aboutContainer.style.backgroundColor = "#202020"; // Fondo negro para About
-    
-          // Cambiar color de los enlaces
-          document.querySelectorAll('nav a').forEach(link => {
-            link.style.color = "#FFFFFF"; // Enlaces blancos
-          });
-          
-          // Cambiar color de los textos en about
-          aboutContainer.style.color = "#FFFFFF"; // Texto blanco en About
-    
-        } else {
-          // Tema claro
-          body.style.backgroundColor = "#FFFFFF"; // Fondo blanco
-          body.style.color = "#000000"; // Texto negro
-          aboutContainer.style.backgroundColor = ""; // Fondo original para About
-    
-          // Cambiar color de los enlaces
-          document.querySelectorAll('nav a').forEach(link => {
-            link.style.color = "#000000"; // Enlaces negros
-          });
-          
-          // Cambiar color de los textos en about
-          aboutContainer.style.color = ""; // Texto original en About
-        }
-      });
-    </script>
-    
   </body>
   
   <section class="section__container booking__container">
@@ -122,10 +84,6 @@
       </div>
     </form>
   </section>
-  
-  
-  
-
     <section class="section__container about__container" id="about">
       <div class="about__image">
         <img src="assets/about.jpg" alt="about" />
@@ -309,12 +267,8 @@
           <div class="footer__socials">
             <a href="#"><img src="assets/facebook.png" alt="facebook" /></a>
             <a href="#"><img src="assets/instagram.png" alt="instagram" /></a>
-            <!--<a href="#"><img src="assets/youtube.png" alt="youtube" /></a>
-            <a href="#"><img src="assets/twitter.png" alt="twitter" /></a>-->
             <a href="#"><img src="assets/whatsapp.png" alt="whatsapp" /></a>
           </div>
-          
-        
         </div>
       </div>
       <div class="footer__bar">
