@@ -1,51 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="habitaciones.css" />
-    <script src="habitacionesService.js"></script>
-    <title>Habitaciones Hotel Glade</title>
-  </head>
-  <body>
-    <header class="header">
-      <nav>
-        <div class="nav__bar">
-          <div class="logo">
-            <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="habitaciones.css" />
+  <script src="habitacionesService.js"></script>
+  <title>Habitaciones Hotel Glade</title>
+</head>
+<body>
+  <header class="header">
+    <nav>
+      <div class="nav__bar">
+        <div class="logo">
+          <a href="index.html"><img src="assets/logo.png" alt="logo" /></a>
         </div>
-      </nav>
-    </header>
-
-    <section class="section__container rooms__available">
-      <h2>Habitaciones Disponibles</h2>
-      <div id="room-results" class="room__grid">
-        <!-- Las habitaciones se mostrarán aquí -->
       </div>
-    </section>
+    </nav>
+  </header>
 
-    <script>
-      // Función para obtener los parámetros de la URL
-      function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        const guestCounts = []; // Para almacenar la cantidad de pasajeros por habitación
-        const roomCount = params.get("rooms"); // Obtener el número de habitaciones
-    
-        // Recoger la cantidad de pasajeros para cada habitación
-        for (let i = 1; i <= roomCount; i++) {
-          const guestCount = params.get(`people-room-${i}`);
-          guestCounts.push(parseInt(guestCount, 10)); // Almacena el número de pasajeros
-        }
-    
-        // Devuelve todos los parámetros necesarios
-        return {
-          checkIn: params.get("check-in"),
-          checkOut: params.get("check-out"),
-          roomCount: parseInt(roomCount, 10),
-          guestCounts
-        };
+  <section class="section__container rooms__available">
+    <h2>Habitaciones Disponibles</h2>
+    <div id="room-results" class="room__grid">
+      <!-- Las habitaciones se mostrarán aquí -->
+    </div>
+    <!-- Elementos para mostrar la cantidad de habitaciones y de pasajeros -->
+    <div id="room-info">
+      <p id="room-count-display"></p>
+      <p id="guest-counts-display"></p>
+    </div>
+  </section>
+
+  <script>
+    // Función para obtener los parámetros de la URL
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      const guestCounts = []; // Para almacenar la cantidad de pasajeros por habitación
+      let roomCount = parseInt(params.get("rooms"), 10); // Obtener el número de habitaciones y convertir a número
+
+      // Validar que roomCount sea un número positivo
+      if (isNaN(roomCount) || roomCount <= 0) {
+        roomCount = 0;
       }
-    </script>
-  </body>
+
+      // Recoger la cantidad de pasajeros para cada habitación
+      for (let i = 1; i <= roomCount; i++) {
+        // Cambiar a `people-room${i}` para que coincida con los parámetros de la URL
+        const guestCount = parseInt(params.get(`people-room${i}`), 10);
+        
+        // Agregar solo valores válidos
+        guestCounts.push(isNaN(guestCount) ? 0 : guestCount); 
+      }
+
+      // Mostrar roomCount y guestCounts en la página
+      document.getElementById("room-count-display").textContent = `Número de habitaciones: ${roomCount}`;
+      document.getElementById("guest-counts-display").textContent = `Pasajeros por habitación: ${guestCounts.join(", ")}`;
+
+      // Devuelve todos los parámetros necesarios
+      return {
+        checkIn: params.get("check-in"),
+        checkOut: params.get("check-out"),
+        roomCount,
+        guestCounts
+      };
+    }
+
+    // Llamar a la función para obtener y mostrar los parámetros
+    getQueryParams();
+  </script>
+</body>
 </html>
