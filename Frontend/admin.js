@@ -85,7 +85,7 @@ function showSection(sectionId, element) {
         menuItems.forEach(item => item.classList.remove('active'));
     // Agregar la clase active al elemento seleccionado
         element.parentElement.classList.add('active');
-    }
+}
 
 // Mostrar por defecto la sección Dashboard al cargar la página
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,6 +1,9 @@
 const menuBtn = document.getElementById("menu-btn");
 const navLinks = document.getElementById("nav-links");
 const menuBtnIcon = menuBtn.querySelector("i");
+const toggleSwitch = document.getElementById("color-toggle");
+const body = document.body;
+const aboutContainer = document.querySelector(".about__container");
 
 menuBtn.addEventListener("click", () => {
   navLinks.classList.toggle("open");
@@ -12,7 +15,6 @@ navLinks.addEventListener("click", () => {
   navLinks.classList.remove("open");
   menuBtnIcon.setAttribute("class", "ri-menu-line");
 });
-
 const scrollRevealOption = {
   distance: "50px",
   origin: "bottom",
@@ -22,44 +24,36 @@ const scrollRevealOption = {
 ScrollReveal().reveal(".header__container p", {
   ...scrollRevealOption,
 });
-
 ScrollReveal().reveal(".header__container h1", {
   ...scrollRevealOption,
   delay: 500,
 });
-
 // about container
 ScrollReveal().reveal(".about__image img", {
   ...scrollRevealOption,
   origin: "left",
 });
-
 ScrollReveal().reveal(".about__content .section__subheader", {
   ...scrollRevealOption,
   delay: 500,
 });
-
 ScrollReveal().reveal(".about__content .section__header", {
   ...scrollRevealOption,
   delay: 1000,
 });
-
 ScrollReveal().reveal(".about__content .section__description", {
   ...scrollRevealOption,
   delay: 1500,
 });
-
 ScrollReveal().reveal(".about__btn", {
   ...scrollRevealOption,
   delay: 2000,
 });
-
 // room container
 ScrollReveal().reveal(".room__card", {
   ...scrollRevealOption,
   interval: 500,
 });
-
 // service container
 ScrollReveal().reveal(".service__list li", {
   ...scrollRevealOption,
@@ -96,17 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
           passengerContainer.appendChild(inputGroup); // Agregar el nuevo grupo al contenedor
       }
   }
-
   // Actualizar el contenedor al cargar la página
   updatePassengerContainer();
-
   // Escuchar cambios en el input de habitaciones
   roomsInput.addEventListener("input", updatePassengerContainer);
 });
-
-const toggleSwitch = document.getElementById("color-toggle");
-const body = document.body;
-const aboutContainer = document.querySelector(".about__container");
 
 toggleSwitch.addEventListener("change", () => {
   if (toggleSwitch.checked) {

@@ -6,7 +6,6 @@ async function getHabitaciones(){
 
 async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas) {
     const url = `http://localhost:4000/habitaciones?fechaInicio=${fechaInicio}&fechaFin=${fechaFin}&cantidadPersonas=${cantidadPersonas}`;
-
     try {
         const res = await fetch(url);
         
@@ -24,7 +23,6 @@ async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas) {
         throw error; // Lanza el error para que se maneje en el lugar donde se llama la función
     }
 }
-
 
 async function eliminarHabitaciones(id) {
     try {
