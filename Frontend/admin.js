@@ -123,10 +123,13 @@ function crearTarjetaHabitacionesInicio(habitaciones) {
 
         nuevaHabitacion.classList.add("tarjeta-habitacion", claseDisponibilidad); // Añadimos ambas clases
         nuevaHabitacion.innerHTML = `
-            <h3>Habitación: ${habitacion.id}</h3>
-            <p>Tipo: ${habitacion.tipo}</p>
-            <p>${disponibilidadTexto}</p>
-            <td><button onclick="eliminarHabitaciones(${habitacion.id})">Eliminar</button></td>
+        <h3>Habitación: ${habitacion.id}</h3>
+        <p>Tipo: ${habitacion.tipo}</p>
+        <p>${disponibilidadTexto}</p>
+        <div class="botones-habitacion">
+            <button onclick="eliminarHabitaciones(${habitacion.id})">Eliminar</button>
+            <button onclick="editarHabitaciones(${habitacion.id})">Editar</button>
+        </div>
         `;
         contenedorHabitaciones.appendChild(nuevaHabitacion);
     });
@@ -134,7 +137,6 @@ function crearTarjetaHabitacionesInicio(habitaciones) {
 getHabitaciones_total().then(habitaciones=>{
     crearTarjetaHabitacionesInicio(habitaciones);
 })
-
 
 //Listar Clientes
 function crearClientes(clientes) {
@@ -180,7 +182,7 @@ function crearClientes(clientes) {
             <td>${cliente.email}</td>
             <td>${cliente.telefono}</td>
             <td>${cliente.direccion}</td>
-            <td><button onclick="eliminarCliente(${cliente.id})">Eliminar</button></td>
+            <td><button onclick="eliminarClientes(${cliente.id})">Eliminar</button></td>
         `;
 
         // Agregar la nueva fila al cuerpo de la tabla

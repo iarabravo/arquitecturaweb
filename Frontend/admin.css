@@ -581,7 +581,7 @@ body{
 
 .tarjeta-habitacion{
     width: 250px; /* Establecer un ancho fijo para todas las tarjetas */
-    height: 140px; /* Establecer una altura fija para todas las tarjetas */
+    height: 170px; /* Establecer una altura fija para todas las tarjetas */
     text-align: center;
     padding: 15px;
     border: unset;
@@ -722,4 +722,11 @@ td, th {
     transform: translate(-50%, -50%); /* Centra el popup */
     left: 50%; /* Posiciona el popup en el centro horizontalmente */
     top: 50%; /* Posiciona el popup en el centro verticalmente */
+}
+
+.botones-habitacion {
+    display: flex;
+    justify-content: flex-end; /* Alinear a la derecha */
+    gap: 20px; /* Espacio entre los botones */
+    margin-top: 10px; /* Espacio superior si es necesario */
 }

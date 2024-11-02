@@ -13,10 +13,8 @@ async function eliminarReserva(id) {
         if (!res.ok) {
             throw new Error(`Error: ${res.statusText}`);
         }
-
         // Mensaje de confirmación
         alert('Reserva eliminada exitosamente'); 
-
         // Recargar la página
         location.reload(); // Recarga la página
     } catch (error) {

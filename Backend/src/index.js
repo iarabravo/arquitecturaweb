@@ -372,56 +372,51 @@ app.post("/clientes", async (req, res) => {
         } 
 });
 
-app.delete("/clientes", async (req, res) => {
+app.delete("/clientes/:id", async (req, res) => {
     console.log("Ruta /clientes (DELETE) llamada");
     connection = await database.getConnection();
     console.log("Conexión a la base de datos establecida");
+
     try {
-        // Obtener los datos de la solicitud (pueden ser enviados en los parámetros de consulta o en el cuerpo)
-        const { dni, nombre, apellido, id } = req.query;
-        console.log("Datos recibidos:", { dni, nombre, apellido, id });
+        const { id } = req.params;
+        console.log("ID del cliente recibido:", id);
 
-        // Verificar si al menos uno de los campos necesarios está presente
-        if (!dni && !(nombre && apellido) && !id) {
-            return res.status(400).json({ error: "Se requiere dni, nombre y apellido, o id para eliminar un cliente" });
+        // Verificar si el ID del cliente es válido
+        if (!id) {
+            return res.status(400).json({ error: "Se requiere el ID del cliente para eliminarlo." });
         }
 
-        // Construir la consulta SQL de forma dinámica
-        let query = "DELETE FROM CLIENTE WHERE";
-        const params = [];
+        // 1. Obtener las reservas del cliente
+        const reservasQuery = "SELECT habitacionId FROM reserva WHERE clienteId = ?";
+        const reservas = await connection.query(reservasQuery, [id]);
 
-        // Eliminar por `id`
-        if (id) {
-            query += " id = ?";
-            params.push(id);
-        }
-        // Eliminar por `dni`
-        else if (dni) {
-            query += " dni = ?";
-            params.push(dni);
-        }
-        // Eliminar por `nombre y apellido`
-        else if (nombre && apellido) {
-            query += " nombre = ? AND apellido = ?";
-            params.push(nombre, apellido);
+        // 2. Eliminar las reservas del cliente
+        const deleteReservasQuery = "DELETE FROM reserva WHERE clienteId = ?";
+        await connection.query(deleteReservasQuery, [id]);
+
+        // 3. Restablecer el tipo de habitación a 1 para cada habitación asociada
+        for (const reserva of reservas) {
+            const habitacionId = reserva.habitacionId;
+            const updateHabitacionQuery = "UPDATE habitacion SET tipo = 1 WHERE id = ?";
+            await connection.query(updateHabitacionQuery, [habitacionId]);
         }
 
-        console.log("Query:", query);
-        console.log("Params:", params);
+        // 4. Eliminar el cliente
+        const deleteClienteQuery = "DELETE FROM cliente WHERE id = ?";
+        const result = await connection.query(deleteClienteQuery, [id]);
 
-        // Ejecutar la consulta
-        const result = await connection.query(query, params);
-
-        // Verificar si alguna fila fue afectada (si el cliente existía)
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Cliente no encontrado" });
         }
-        res.status(200).json({ message: "Cliente eliminado exitosamente" });
+
+        res.status(200).json({ message: "Cliente y reservas eliminados exitosamente" });
     } catch (error) {
         console.error("Error en la consulta a la base de datos:", error);
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
+
+
 
 app.get("/reservas", async (req, res) => {
     console.log("Ruta /reservas llamada"); // Verificar llamada a la ruta

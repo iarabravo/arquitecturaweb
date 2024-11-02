@@ -22,7 +22,6 @@ async function crearCliente(data) {
     return cliente; // Retorna el cliente creado
 }
 
-
 async function eliminarClientes(id) {
     try {
         const res = await fetch(`http://localhost:4000/clientes/${id}`, {
