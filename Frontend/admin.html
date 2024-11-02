@@ -102,6 +102,19 @@
                     <button onclick="cerrarPopup()">Cerrar</button>
                 </div>
             </div>
+            <!-- Popup para editar habitación -->
+            <div id="popup-editar-habitacion" style="display:none;">
+                <div class="popup-content">
+                    <h2>Editar Habitación</h2>
+                    <label for="disponible-editar">Disponibilidad:</label>
+                    <select id="disponible-editar">
+                        <option value="1">Disponible</option>
+                        <option value="0">No Disponible</option>
+                    </select>
+                    <button onclick="guardarCambiosHabitacion()">Guardar cambios</button>
+                    <button onclick="cerrarPopupEditar()">Cerrar</button>
+                </div>
+            </div>
         </main>
     
         <main id="reservas" class="section">

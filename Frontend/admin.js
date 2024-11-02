@@ -286,3 +286,7 @@ function cerrarPopup() {
     document.getElementById('popup-agregar-habitacion').style.display = 'none';
 }
 
+function cerrarPopupEditar() {
+    document.getElementById('popup-editar-habitacion').style.display = 'none';
+}
+

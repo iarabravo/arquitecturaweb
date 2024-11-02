@@ -74,31 +74,9 @@ app.get("/habitaciones", async (req, res) => {
         console.log("Condición de tipo añadida a la consulta");
     }
 
-    // Validar el parámetro de disponibilidad solo si está definido
-    if (disponible !== undefined) {
-        if (disponible != 0 && disponible != 1) {
-            return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
-        } else {
-            conditions.push("disponible = ?");
-            params.push(disponible);
-            console.log("Condición de disponibilidad añadida a la consulta");
-        }
-    }
-
     // Si hay condiciones, las añadimos a la consulta
     if (conditions.length > 0) {
         query += " WHERE " + conditions.join(" AND ");
-    }
-
-    // Agrupación para obtener habitaciones únicas
-    query += " GROUP BY h.id";
-
-    // Añadir LIMIT basado en cantidadHabitaciones
-    if (cantidadHabitaciones) {
-        if (isNaN(cantidadHabitaciones) || cantidadHabitaciones <= 0) {
-            return res.status(400).json({ error: "La cantidad de habitaciones debe ser un número positivo." });
-        }
-        query += ` LIMIT ${cantidadHabitaciones}`;
     }
 
     try {
@@ -291,6 +269,42 @@ app.delete("/habitaciones/:id", async (req, res) => {
     }
 });
 
+app.put("/habitaciones/:id", async (req, res) => {
+    console.log("Ruta /habitaciones/:id (PUT) llamada");
+    let connection;
+    try {
+        connection = await database.getConnection();
+        console.log("Conexión a la base de datos establecida");
+
+        // Obtener el ID de la habitación de los parámetros de la URL
+        const { id } = req.params; // Esto debe ser el ID correcto
+
+        // Asegúrate de que estás capturando el 'disponible' correctamente
+        const { disponible } = req.body;
+        console.log("Datos recibidos:", { disponible });
+
+        if (disponible === undefined) { // Cambié aquí de `if (disponible)` a `if (disponible === undefined)`
+            return res.status(400).json({ error: "Faltan datos requeridos: disponible son obligatorios." });
+        }
+
+        const query = "UPDATE HABITACION SET disponible = ? WHERE id = ?";
+        const params = [disponible, id]; // Usar el ID y la disponibilidad correctos
+        console.log("Query: ", query);
+        console.log("Params: ", params);
+
+        const result = await connection.query(query, params);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Habitación no encontrada" });
+        }
+
+        res.status(200).json({ message: "Habitación actualizada exitosamente" });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    } 
+});
+
 app.get("/clientes",async(req,res)=>
     {
         console.log("Ruta /clientes llamada"); // Verificar llamada a la ruta
@@ -415,8 +429,6 @@ app.delete("/clientes/:id", async (req, res) => {
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
-
-
 
 app.get("/reservas", async (req, res) => {
     console.log("Ruta /reservas llamada"); // Verificar llamada a la ruta
@@ -568,3 +580,4 @@ app.delete("/reservas/:id", async (req, res) => {
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
+

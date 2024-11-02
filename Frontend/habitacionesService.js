@@ -31,7 +31,6 @@ async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas, cantidad
     }
 }
 
-
 async function eliminarHabitaciones(id) {
     try {
         const res = await fetch(`http://localhost:4000/habitaciones/${id}`, {
@@ -50,6 +49,68 @@ async function eliminarHabitaciones(id) {
     } catch (error) {
         console.error('Error al eliminar la habitacion:', error);
         alert('No se pudo eliminar la habitacion'); // Manejo de errores
+    }
+}
+
+let idHabitacionActual; // Asegúrate de que esta variable sea accesible globalmente
+
+async function editarHabitaciones(id) {
+    idHabitacionActual = id; // Almacena el ID de la habitación que se está editando
+    try {
+        const res = await fetch(`http://localhost:4000/habitaciones?id=${id}`);
+        if (!res.ok) {
+            throw new Error(`Error: ${res.statusText}`);
+        }
+        const habitacion = await res.json();
+        
+        if (habitacion.length === 0) {
+            alert('No se encontró la habitación con el ID especificado.');
+            return;
+        }
+
+        const data = habitacion[0];
+        document.getElementById('disponible-editar').value = data.disponible;
+
+        // Mostrar el popup
+        document.getElementById('popup-editar-habitacion').style.display = 'block';
+    } catch (error) {
+        console.error('Error al obtener los datos de la habitación:', error);
+    }
+}
+
+async function guardarCambiosHabitacion() {
+    const disponible = document.getElementById('disponible-editar').value;
+
+    // Verificar que todos los campos estén llenos
+    if (disponible === undefined) {
+        alert("Por favor, completa todos los campos.");
+        return;
+    }
+
+    const habitacionEditada = {
+        disponible: parseInt(disponible, 10), // Asegúrate de convertir a número
+    };
+
+    try {
+        // Asegúrate de usar el ID correcto
+        const res = await fetch(`http://localhost:4000/habitaciones/${idHabitacionActual}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(habitacionEditada),
+        });
+
+        if (!res.ok) {
+            throw new Error(`Error: ${res.statusText}`);
+        }
+
+        alert("Habitación editada exitosamente");
+        cerrarPopupEditar(); // Cerrar el popup
+        location.reload(); // Recargar la página para ver los cambios
+    } catch (error) {
+        console.error('Error al guardar los cambios de la habitación:', error);
+        alert("No se pudo guardar los cambios.");
     }
 }
 
