@@ -7,7 +7,6 @@ Este proyecto es una API diseñada para gestionar las operaciones diarias de un 
 1. **Reservas:** Crear, modificar y cancelar reservas de habitaciones.
 2. **Habitaciones:** Gestionar la disponibilidad de habitaciones, sus características y precios.
 3. **Clientes:** Registrar y administrar la información de los clientes.
-4. **Facturas:** Generar facturas por las estancias de los clientes.
 
 ## 🗂️ _Modelado de Datos (DER)_
 El modelo de datos incluye las siguientes entidades:
@@ -15,7 +14,6 @@ El modelo de datos incluye las siguientes entidades:
 * Clientes: Información del cliente (ID, nombre, apellido, dirección, etc.)
 * Habitaciones: Detalles de las habitaciones (ID, tipo, precio, estado de disponibilidad, etc.)
 * Reservas: Información sobre las reservas (ID, ID del cliente, ID de la habitación, fechas de check-in y check-out, estado, etc.)
-* Facturas: Detalles de las facturas generadas (ID, ID de la reserva, monto total, fecha de emisión, etc.)
 
 ## 🛠️ _Estructura de Clases (OOP)_
 Clases Principales
@@ -28,9 +26,6 @@ Clases Principales
 * Reserva:
     * Atributos: id, clienteId, habitacionId, fechaInicio, fechaFin, estado
     * Métodos: crear(), modificar(), cancelar()
-* Factura:
-    * Atributos: id, reservaId, montoTotal, fechaEmision
-    * Métodos: generar(), actualizar()
 
 ## 🗃️ _Endpoints de la API_
 Clientes
@@ -145,34 +140,6 @@ Habitaciones
             "details": "Error en la base de datos."
             }`
     
-Facturas
-* Generar factura
-    * URL: /api/facturas
-    * Método: POST
-    * Descripción: Genera una factura para una reserva específica.
-    * Body:
-        `{
-        "reservaId": 1,
-        "montoTotal": 500.0
-        }`
-    * Respuesta exitosa:
-        * Código: 201 Created
-        * Body:
-            `{
-            "id": 1,
-            "reservaId": 1,
-            "montoTotal": 500.0,
-            "fechaEmision": "2024-09-16"
-            }`
-    * Respuesta error:
-        * Código: 400 Bad Request
-        * Descripción: Datos inválidos para la generación de la factura.
-        * Body:
-            `{
-            "error": "Datos inválidos para la generación de la factura.",
-            "details": "La reserva especificada no existe o el monto total es incorrecto."
-            }`
-
 ## 🖼️ _Capturas de Pantalla del Progreso_
 
 ### 1. Página Principal

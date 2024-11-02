@@ -430,6 +430,76 @@ app.delete("/clientes/:id", async (req, res) => {
     }
 });
 
+app.put("/clientes/:id", async (req, res) => {
+    console.log("Ruta /clientes/:id (PUT) llamada");
+    let connection;
+    try {
+        connection = await database.getConnection();
+        console.log("Conexión a la base de datos establecida");
+
+        // Obtener el ID del cliente de los parámetros de la URL
+        const { id } = req.params; // Esto debe ser el ID correcto
+
+        // Capturar los datos del cuerpo de la solicitud
+        const { nombre, apellido, dni, email, telefono, direccion } = req.body;
+        console.log("Datos recibidos:", { nombre, apellido, dni, email, telefono, direccion });
+
+        // Validar que se reciban al menos algunos datos
+        if (nombre === undefined && apellido === undefined && dni === undefined &&
+            email === undefined && telefono === undefined && direccion === undefined) {
+            return res.status(400).json({ error: "Faltan datos requeridos para actualizar el cliente." });
+        }
+
+        // Construir la consulta de actualización
+        const fieldsToUpdate = [];
+        const params = [];
+        
+        if (nombre !== undefined) {
+            fieldsToUpdate.push("nombre = ?");
+            params.push(nombre);
+        }
+        if (apellido !== undefined) {
+            fieldsToUpdate.push("apellido = ?");
+            params.push(apellido);
+        }
+        if (dni !== undefined) {
+            fieldsToUpdate.push("dni = ?");
+            params.push(dni);
+        }
+        if (email !== undefined) {
+            fieldsToUpdate.push("email = ?");
+            params.push(email);
+        }
+        if (telefono !== undefined) {
+            fieldsToUpdate.push("telefono = ?");
+            params.push(telefono);
+        }
+        if (direccion !== undefined) {
+            fieldsToUpdate.push("direccion = ?");
+            params.push(direccion);
+        }
+
+        // Asegúrate de agregar el ID al final de los parámetros
+        params.push(id);
+
+        // Construir la consulta final
+        const query = `UPDATE cliente SET ${fieldsToUpdate.join(", ")} WHERE id = ?`;
+        console.log("Query: ", query);
+        console.log("Params: ", params);
+
+        const result = await connection.query(query, params);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+        }
+
+        res.status(200).json({ message: "Cliente actualizado exitosamente" });
+    } catch (error) {
+        console.error("Error en la consulta a la base de datos:", error);
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    } 
+});
+
 app.get("/reservas", async (req, res) => {
     console.log("Ruta /reservas llamada"); // Verificar llamada a la ruta
     const connection = await database.getConnection();
