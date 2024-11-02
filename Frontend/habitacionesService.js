@@ -1,10 +1,11 @@
-async function getHabitaciones(){
+async function getHabitaciones_total() { 
     const res = await fetch("http://localhost:4000/habitaciones");
     const resJson = await res.json();
+    console.log("Datos recibidos de la API:", resJson); // Verificar datos recibidos
     return resJson;
 }
 
-async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas) {
+async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas, cantidadHabitaciones) {
     // Construir la URL con los parámetros necesarios
     const url = new URL("http://localhost:4000/habitaciones");
     
@@ -12,7 +13,8 @@ async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas) {
     if (fechaInicio) url.searchParams.append("fechaInicio", fechaInicio);
     if (fechaFin) url.searchParams.append("fechaFin", fechaFin);
     if (cantidadPersonas) url.searchParams.append("cantidadPersonas", cantidadPersonas);
-    
+    if (cantidadHabitaciones) url.searchParams.append("cantidadHabitaciones", cantidadHabitaciones); // Añade este parámetro
+
     try {
         const res = await fetch(url);
         
@@ -28,6 +30,7 @@ async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas) {
         throw error; // Propagar el error
     }
 }
+
 
 async function eliminarHabitaciones(id) {
     try {

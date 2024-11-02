@@ -24,5 +24,3 @@ async function eliminarReserva(id) {
         alert('No se pudo eliminar la reserva'); // Manejo de errores
     }
 }
-
-

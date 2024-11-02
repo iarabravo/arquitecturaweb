@@ -26,41 +26,42 @@ app.get("/habitaciones", async (req, res) => {
     console.log("Ruta /habitaciones llamada");
     const connection = await database.getConnection();
     console.log("Conexión a la base de datos establecida");
-    
+
     const tipo = req.query.tipo;
     const id = req.query.id;
     const disponible = req.query.disponible;
-    const cantidadPersonas = req.query.cantidadPersonas;
-    const fechaInicio = req.query.fechaInicio;
-    const fechaFin = req.query.fechaFin;
-    
+    const cantidadPersonas = req.query.cantidadPersonas; // Cantidad de personas
+    const cantidadHabitaciones = req.query.cantidadHabitaciones; // Cantidad de habitaciones solicitadas
+    const fechaInicio = req.query.fechaInicio; // Valor por defecto
+    const fechaFin = req.query.fechaFin; // Valor por defecto
+
     console.log("Tipo de habitación recibido: ", tipo);
     console.log("ID de habitación recibido: ", id);
     console.log("Disponibilidad recibida: ", disponible);
+    console.log("Cantidad de habitaciones recibida: ", cantidadHabitaciones);
     console.log("Cantidad de personas recibida: ", cantidadPersonas);
     console.log("Fecha de inicio recibida: ", fechaInicio);
     console.log("Fecha de fin recibida: ", fechaFin);
 
     // Construcción de la consulta
     let query = `
-        SELECT h.*, 
-        CASE 
-            WHEN r.habitacionId IS NOT NULL THEN 0 
-            ELSE 1 
-        END AS disponible 
-        FROM HABITACION h 
+        SELECT h.id, h.tipo, h.precio,h.capacidad,h.disponible,
+            CASE 
+                WHEN r.habitacionId IS NULL THEN 1  -- Disponible
+                ELSE 0  -- No disponible
+            END AS disponible
+        FROM habitacion h
         LEFT JOIN reserva r ON h.id = r.habitacionId 
-        AND (
-            (r.fechaInicio < ? AND r.fechaFin > ?) -- Reservas que cruzan las fechas solicitadas
-        )
+        AND (r.fechaInicio < ? AND r.fechaFin > ?) -- Reservas que cruzan las fechas
     `;
-    const params = [fechaFin,fechaInicio]; // Fechas por defecto si no se reciben
+
+    const params = [fechaFin, fechaInicio]; // Fechas por defecto si no se reciben
     const conditions = [];
 
-    // Agregar condición para la cantidad de personas
+    // Validar cantidad de personas
     if (cantidadPersonas) {
-        if (isNaN(cantidadPersonas)) {
-            return res.status(400).json({ error: "La cantidad de personas debe ser un número." });
+        if (isNaN(cantidadPersonas) || cantidadPersonas <= 0) {
+            return res.status(400).json({ error: "La cantidad de personas debe ser un número positivo." });
         }
         conditions.push("h.capacidad >= ?");
         params.push(cantidadPersonas);
@@ -96,10 +97,22 @@ app.get("/habitaciones", async (req, res) => {
     if (conditions.length > 0) {
         query += " WHERE " + conditions.join(" AND ");
     }
-    
+
+    // Agrupación y filtrado final
+    query += " GROUP BY h.id HAVING disponible = 1";
+
+    // Añadir LIMIT basado en cantidadHabitaciones
+    if (cantidadHabitaciones) {
+        if (isNaN(cantidadHabitaciones) || cantidadHabitaciones <= 0) {
+            return res.status(400).json({ error: "La cantidad de habitaciones debe ser un número positivo." });
+        }
+        // Aquí, se agrega el LIMIT directamente en la consulta
+        query += ` LIMIT ${cantidadHabitaciones}`; // Usa la interpolación para agregar el límite
+    }
+
     try {
-        console.log("Query: ", query);
-        console.log("Params: ", params);
+        console.log("Query: ", query);  // Agrega este log para ver la consulta
+        console.log("Params: ", params);  // Agrega este log para ver los parámetros
 
         const result = await connection.query(query, params);
 
@@ -110,7 +123,7 @@ app.get("/habitaciones", async (req, res) => {
         res.set('Cache-Control', 'no-store');
         res.json(result);
     } catch (error) {
-        console.error(error);
+        console.error("Error de la consulta: ", error);  // Agrega este log para ver el error específico
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
@@ -386,45 +399,38 @@ app.post("/reservas", async (req, res) => {
         console.log("Conexión a la base de datos establecida");
 
         // Obtener los datos del cuerpo de la solicitud
-        const { clienteId, tipoHabitacion, fechaInicio, fechaFin } = req.body;
-        console.log("Datos recibidos:", { clienteId, tipoHabitacion, fechaInicio, fechaFin });
+        const { clienteId, habitacionId, fechaInicio, fechaFin } = req.body;
+        console.log("Datos recibidos:", { clienteId, habitacionId, fechaInicio, fechaFin });
 
         // Verifica si todos los campos necesarios están presentes
-        if (!clienteId || !tipoHabitacion || !fechaInicio || !fechaFin) {
-            return res.status(400).json({ error: "Faltan datos requeridos: clienteId, tipoHabitacion, fechaInicio y fechaFin son obligatorios." });
+        if (!clienteId || !habitacionId || !fechaInicio || !fechaFin) {
+            return res.status(400).json({ error: "Faltan datos requeridos: clienteId, habitacionId, fechaInicio y fechaFin son obligatorios." });
         }
 
-        // Verificar habitaciones disponibles por tipo en el rango de fechas
-        const availableRoomsQuery = `
-            SELECT id FROM HABITACION 
-            WHERE tipo = ? 
-            AND disponible = 1 
-            AND id NOT IN (
-                SELECT habitacionId FROM reserva 
-                WHERE 
+        // Verificar si la habitación especificada está disponible en el rango de fechas
+        const checkAvailabilityQuery = `
+            SELECT id FROM reserva 
+            WHERE habitacionId = ? 
+            AND (
                 (fechaInicio <= ? AND fechaFin >= ?) OR 
                 (fechaInicio <= ? AND fechaFin >= ?)
             )
-            LIMIT 1
         `;
-        const availableRoomsParams = [tipoHabitacion, fechaFin, fechaInicio, fechaInicio, fechaInicio];
-        const availableRooms = await connection.query(availableRoomsQuery, availableRoomsParams);
+        const checkAvailabilityParams = [habitacionId, fechaFin, fechaInicio, fechaInicio, fechaFin];
+        const existingReservations = await connection.query(checkAvailabilityQuery, checkAvailabilityParams);
 
-        if (availableRooms.length === 0) {
-            return res.status(400).json({ error: "No hay habitaciones disponibles del tipo seleccionado en las fechas elegidas." });
+        if (existingReservations.length > 0) {
+            return res.status(400).json({ error: "La habitación seleccionada no está disponible en las fechas elegidas." });
         }
 
-        // Tomar el primer ID de habitación disponible
-        const selectedRoomId = availableRooms[0].id;
-
-        // Si hay habitaciones disponibles, proceder a la creación de la reserva
+        // Proceder a la creación de la reserva
         const insertQuery = "INSERT INTO reserva (clienteId, habitacionId, fechaInicio, fechaFin) VALUES (?, ?, ?, ?)";
-        const insertParams = [clienteId, selectedRoomId, fechaInicio, fechaFin];
+        const insertParams = [clienteId, habitacionId, fechaInicio, fechaFin];
         const result = await connection.query(insertQuery, insertParams);
 
         // Cambiar el estado de la habitación a no disponible
         const updateQuery = "UPDATE HABITACION SET disponible = 0 WHERE id = ?";
-        await connection.query(updateQuery, [selectedRoomId]);
+        await connection.query(updateQuery, [habitacionId]);
 
         res.status(201).json({ message: "Reserva creada exitosamente", id: result.insertId });
     } catch (error) {

@@ -135,6 +135,7 @@ getHabitaciones().then(habitaciones=>{
     crearTarjetaHabitacionesInicio(habitaciones);
 })
 
+
 //Listar Clientes
 function crearClientes(clientes) {
     const contenedorClientes = document.getElementById("clientes-container");
