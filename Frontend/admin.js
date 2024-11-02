@@ -131,7 +131,7 @@ function crearTarjetaHabitacionesInicio(habitaciones) {
         contenedorHabitaciones.appendChild(nuevaHabitacion);
     });
 }
-getHabitaciones().then(habitaciones=>{
+getHabitaciones_total().then(habitaciones=>{
     crearTarjetaHabitacionesInicio(habitaciones);
 })
 

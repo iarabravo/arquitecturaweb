@@ -32,6 +32,103 @@ app.get("/habitaciones", async (req, res) => {
     const disponible = req.query.disponible;
     const cantidadPersonas = req.query.cantidadPersonas; // Cantidad de personas
     const cantidadHabitaciones = req.query.cantidadHabitaciones; // Cantidad de habitaciones solicitadas
+
+    console.log("Tipo de habitación recibido: ", tipo);
+    console.log("ID de habitación recibido: ", id);
+    console.log("Disponibilidad recibida: ", disponible);
+    console.log("Cantidad de habitaciones recibida: ", cantidadHabitaciones);
+    console.log("Cantidad de personas recibida: ", cantidadPersonas);
+
+    // Construcción de la consulta
+    let query = `
+        SELECT h.id, h.tipo, h.precio, h.capacidad,
+            CASE 
+                WHEN r.habitacionId IS NULL THEN 1  -- Disponible
+                ELSE 0  -- No disponible
+            END AS disponible
+        FROM habitacion h
+        LEFT JOIN reserva r ON h.id = r.habitacionId
+    `;
+
+    const params = [];
+    const conditions = [];
+
+    // Validar cantidad de personas
+    if (cantidadPersonas) {
+        if (isNaN(cantidadPersonas) || cantidadPersonas <= 0) {
+            return res.status(400).json({ error: "La cantidad de personas debe ser un número positivo." });
+        }
+        conditions.push("h.capacidad >= ?");
+        params.push(cantidadPersonas);
+    }
+
+    // Verificar si se proporciona un ID o tipo
+    if (id) {
+        conditions.push("h.id = ?");
+        params.push(id);
+        console.log("Condición de ID añadida a la consulta");
+    }
+    if (tipo) {
+        conditions.push("h.tipo = ?");
+        params.push(tipo);
+        console.log("Condición de tipo añadida a la consulta");
+    }
+
+    // Validar el parámetro de disponibilidad solo si está definido
+    if (disponible !== undefined) {
+        if (disponible != 0 && disponible != 1) {
+            return res.status(400).json({ error: "El valor de 'disponible' debe ser 0 o 1." });
+        } else {
+            conditions.push("disponible = ?");
+            params.push(disponible);
+            console.log("Condición de disponibilidad añadida a la consulta");
+        }
+    }
+
+    // Si hay condiciones, las añadimos a la consulta
+    if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+    }
+
+    // Agrupación para obtener habitaciones únicas
+    query += " GROUP BY h.id";
+
+    // Añadir LIMIT basado en cantidadHabitaciones
+    if (cantidadHabitaciones) {
+        if (isNaN(cantidadHabitaciones) || cantidadHabitaciones <= 0) {
+            return res.status(400).json({ error: "La cantidad de habitaciones debe ser un número positivo." });
+        }
+        query += ` LIMIT ${cantidadHabitaciones}`;
+    }
+
+    try {
+        console.log("Query: ", query);  // Agrega este log para ver la consulta
+        console.log("Params: ", params);  // Agrega este log para ver los parámetros
+
+        const result = await connection.query(query, params);
+
+        // Verificar si se encontraron resultados
+        if (result.length === 0) {
+            return res.status(404).json({ error: "No se encontró ninguna habitación." });
+        }
+        res.set('Cache-Control', 'no-store');
+        res.json(result);
+    } catch (error) {
+        console.error("Error de la consulta: ", error);  // Agrega este log para ver el error específico
+        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+    }
+});
+
+app.get("/habitaciones/disponibilidad", async (req, res) => {
+    console.log("Ruta /habitaciones llamada");
+    const connection = await database.getConnection();
+    console.log("Conexión a la base de datos establecida");
+
+    const tipo = req.query.tipo;
+    const id = req.query.id;
+    const disponible = req.query.disponible;
+    const cantidadPersonas = req.query.cantidadPersonas; // Cantidad de personas
+    const cantidadHabitaciones = req.query.cantidadHabitaciones; // Cantidad de habitaciones solicitadas
     const fechaInicio = req.query.fechaInicio; // Valor por defecto
     const fechaFin = req.query.fechaFin; // Valor por defecto
 

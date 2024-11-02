@@ -7,7 +7,7 @@ async function getHabitaciones_total() {
 
 async function getHabitaciones(fechaInicio, fechaFin, cantidadPersonas, cantidadHabitaciones) {
     // Construir la URL con los parámetros necesarios
-    const url = new URL("http://localhost:4000/habitaciones");
+    const url = new URL("http://localhost:4000/habitaciones/disponibilidad");
     
     // Añadir los parámetros a la URL
     if (fechaInicio) url.searchParams.append("fechaInicio", fechaInicio);
