@@ -238,21 +238,6 @@ body{
     color: var(--dark);
 }
 
-.content nav form .form-input button{
-    width: 80px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--primary);
-    color: var(--light);
-    font-size: 18px;
-    border: none;
-    outline: none;
-    border-radius: 0 36px 36px 0;
-    cursor: pointer;
-}
-
 .content nav .notif{
     font-size: 20px;
     position: relative;

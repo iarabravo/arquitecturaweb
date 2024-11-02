@@ -29,18 +29,6 @@ menuBar.addEventListener('click', () => {
     sideBar.classList.toggle('close');
 });
 
-searchBtn.addEventListener('click', function (e) {
-    if (window.innerWidth < 576) {
-        e.preventDefault;
-        searchForm.classList.toggle('show');
-        if (searchForm.classList.contains('show')) {
-            searchBtnIcon.classList.replace('bx-search', 'bx-x');
-        } else {
-            searchBtnIcon.classList.replace('bx-x', 'bx-search');
-        }
-    }
-});
-
 window.addEventListener('resize', () => {
     if (window.innerWidth < 768) {
         sideBar.classList.add('close');
