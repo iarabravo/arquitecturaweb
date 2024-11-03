@@ -118,9 +118,14 @@ app.get("/habitaciones/disponibilidad", async (req, res) => {
     console.log("Fecha de inicio recibida: ", fechaInicio);
     console.log("Fecha de fin recibida: ", fechaFin);
 
+    // Validar que se ingresen las fechas de inicio y fin
+    if (!fechaInicio || !fechaFin) {
+        return res.status(400).json({ error: "Se requieren fechas de inicio y fin." });
+    }
+
     // Construcción de la consulta
     let query = `
-        SELECT h.id, h.tipo, h.precio,h.capacidad,h.disponible,
+        SELECT h.id, h.tipo, h.precio, h.capacidad, h.disponible,
             CASE 
                 WHEN r.habitacionId IS NULL THEN 1  -- Disponible
                 ELSE 0  -- No disponible
@@ -153,7 +158,7 @@ app.get("/habitaciones/disponibilidad", async (req, res) => {
         params.push(tipo);
         console.log("Condición de tipo añadida a la consulta");
     }
-    
+
     // Validar el parámetro de disponibilidad solo si está definido
     if (disponible !== undefined) {
         if (disponible != 0 && disponible != 1) {
@@ -181,7 +186,6 @@ app.get("/habitaciones/disponibilidad", async (req, res) => {
         if (isNaN(cantidadHabitaciones) || cantidadHabitaciones <= 0) {
             return res.status(400).json({ error: "La cantidad de habitaciones debe ser un número positivo." });
         }
-        // Aquí, se agrega el LIMIT directamente en la consulta
         query += ` LIMIT ${cantidadHabitaciones}`; // Usa la interpolación para agregar el límite
     }
 
@@ -199,38 +203,6 @@ app.get("/habitaciones/disponibilidad", async (req, res) => {
         res.json(result);
     } catch (error) {
         console.error("Error de la consulta: ", error);  // Agrega este log para ver el error específico
-        res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-    }
-});
-
-app.post("/habitaciones", async (req, res) => {
-    console.log("Ruta /habitaciones (POST) llamada");
-    connection = await database.getConnection();
-
-    try {
-        console.log("Conexión a la base de datos establecida");
-
-        // Obtener los datos del cuerpo de la solicitud
-        const { tipo, precio, capacidad } = req.body;
-        console.log("Datos recibidos:", { tipo, precio, capacidad });
-
-        // Verifica si todos los campos necesarios están presentes
-        if (!tipo || !precio || !capacidad) {
-            return res.status(400).json({ error: "Faltan datos requeridos: tipo, precio y capacidad son obligatorios." });
-        }
-        const disponible = 1;
-
-        // Construir la consulta SQL
-        const query = "INSERT INTO HABITACION (tipo, precio, disponible, capacidad) VALUES (?, ?, ?, ?)";
-        const params = [tipo, parseFloat(precio), disponible, capacidad];
-        console.log("Query: ", query);
-        console.log("Params: ", params);
-
-        // Ejecuta la consulta
-        const result = await connection.query(query, params);
-        res.status(201).json({ message: "Habitación creada exitosamente", id: result.insertId });
-    } catch (error) {
-        console.error("Error en la consulta a la base de datos:", error);
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
     }
 });
