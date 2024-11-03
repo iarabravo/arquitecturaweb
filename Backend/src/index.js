@@ -411,7 +411,7 @@ app.delete("/clientes/:id", async (req, res) => {
         // 3. Restablecer el tipo de habitación a 1 para cada habitación asociada
         for (const reserva of reservas) {
             const habitacionId = reserva.habitacionId;
-            const updateHabitacionQuery = "UPDATE habitacion SET tipo = 1 WHERE id = ?";
+            const updateHabitacionQuery = "UPDATE habitacion SET disponible = 1 WHERE id = ?";
             await connection.query(updateHabitacionQuery, [habitacionId]);
         }
 

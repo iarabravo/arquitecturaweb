@@ -77,33 +77,34 @@
       };
     }
 
-  async function loadRooms() {
-  const params = getQueryParams(); // Obtener los parámetros de la URL
-  const { checkIn, checkOut, roomCount, peopleCount } = params;
+    async function loadRooms() {
+    const params = getQueryParams(); // Obtener los parámetros de la URL
+    const { checkIn, checkOut, roomCount, peopleCount } = params;
 
-  // Llamar a la función para obtener las habitaciones
-  const habitaciones = await getHabitaciones(checkIn, checkOut, peopleCount, roomCount);
-  
-  // Mostrar los resultados en la página
-  const roomResultsContainer = document.getElementById("room-results");
-  roomResultsContainer.innerHTML = ""; // Limpiar resultados anteriores
+    // Llamar a la función para obtener las habitaciones
+    const habitaciones = await getHabitaciones(checkIn, checkOut, peopleCount, roomCount);
+    
+    // Mostrar los resultados en la página
+    const roomResultsContainer = document.getElementById("room-results");
+    roomResultsContainer.innerHTML = ""; // Limpiar resultados anteriores
 
-  if (habitaciones.length === 0) {
-    roomResultsContainer.innerHTML = "<p>No hay habitaciones disponibles para estas fechas.</p>";
-  } else {
-    habitaciones.forEach(habitacion => {
-      const roomDiv = document.createElement("div");
-      roomDiv.classList.add("room"); // Añadir una clase para estilos
-      roomDiv.innerHTML = `
-        <h3>${habitacion.tipo}</h3>
-        <p>ID: ${habitacion.id}</p>
-        <p>Capacidad: ${habitacion.capacidad} personas</p>
-        <p>Precio por noche: $${habitacion.precio}</p>
-      `;
-      roomResultsContainer.appendChild(roomDiv);
-    });
-  }
+    if (habitaciones.length === 0) {
+      roomResultsContainer.innerHTML = "<p>No hay habitaciones disponibles para estas fechas.</p>";
+    } else {
+      habitaciones.forEach(habitacion => {
+        const roomDiv = document.createElement("div");
+        roomDiv.classList.add("room"); // Añadir una clase para estilos
+        roomDiv.innerHTML = `
+          <h3>${habitacion.tipo}</h3>
+          <p>ID: ${habitacion.id}</p>
+          <p>Capacidad: ${habitacion.capacidad} personas</p>
+          <p>Precio por noche: $${habitacion.precio}</p>
+        `;
+        roomResultsContainer.appendChild(roomDiv);
+      });
+    }
 }
+
     // Llamar a la función para cargar las habitaciones al cargar la página
     window.onload = loadRooms;
     document.getElementById("reservation-form").addEventListener("submit", async function(event) {
@@ -171,6 +172,14 @@
                 document.getElementById("reservation-result").innerText += "Reserva exitosa para la habitación " + habitacionId + ".\n";
             }
         }
+
+        // Después de procesar todas las reservas, verificar si hay reservas exitosas y redirigir
+        document.getElementById("reservation-result").innerText += "Redirigiendo a la página principal...";
+
+        // Redirigir después de 2 segundos
+        setTimeout(() => {
+            window.location.href = "index.html"; 
+        }, 2000); // Espera 2000 ms (2 segundos)
     });
   </script>
 </body>
