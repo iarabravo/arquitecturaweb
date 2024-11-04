@@ -90,7 +90,7 @@ app.get("/habitaciones", async (req, res) => {
             return res.status(404).json({ error: "No se encontró ninguna habitación." });
         }
         res.set('Cache-Control', 'no-store');
-        res.json(result);
+        res.json(result); //200 ok
     } catch (error) {
         console.error("Error de la consulta: ", error);  // Agrega este log para ver el error específico
         res.status(500).json({ error: 'Error en la consulta a la base de datos' });
@@ -233,7 +233,6 @@ app.delete("/habitaciones/:id", async (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Habitación no encontrada" });
         }
-
         res.status(200).json({ message: "Habitación eliminada exitosamente" });
     } catch (error) {
         console.error("Error en la consulta a la base de datos:", error);
@@ -269,7 +268,6 @@ app.put("/habitaciones/:id", async (req, res) => {
         if (result.affectedRows === 0) {
             return res.status(404).json({ error: "Habitación no encontrada" });
         }
-
         res.status(200).json({ message: "Habitación actualizada exitosamente" });
     } catch (error) {
         console.error("Error en la consulta a la base de datos:", error);
