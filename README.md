@@ -143,17 +143,17 @@ Habitaciones
 ## 🖼️ _Capturas de Pantalla del Progreso_
 
 ### 1. Página Principal
-![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_1.PNG)
-![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_2.PNG)
-![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_3.PNG)
-![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_6.PNG)
-![Interfaz de Pagina Principal](Frontend/assets/Pagina_Principal_5.PNG)
+![Interfaz de Pagina Principal](Sistema/assets/Pagina_Principal_1.PNG)
+![Interfaz de Pagina Principal](Sistema/assets/Pagina_Principal_2.PNG)
+![Interfaz de Pagina Principal](Sistema/assets/Pagina_Principal_3.PNG)
+![Interfaz de Pagina Principal](Sistema/assets/Pagina_Principal_6.PNG)
+![Interfaz de Pagina Principal](Sistema/assets/Pagina_Principal_5.PNG)
 
 ### 2. Login para administrador
-![Login](Frontend/assets/Login.PNG)
+![Login](Sistema/assets/Login.PNG)
 
 ### 3. Página Principal para administrador
-![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Inicio.PNG)
-![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Habitaciones.PNG)
-![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Reservas.PNG)
-![Interfaz de Pagina para administrador](Frontend/assets/Pagina_Admin_Clientes.PNG)
+![Interfaz de Pagina para administrador](Sistema/assets/Pagina_Admin_Inicio.PNG)
+![Interfaz de Pagina para administrador](Sistema/assets/Pagina_Admin_Habitaciones.PNG)
+![Interfaz de Pagina para administrador](Sistema/assets/Pagina_Admin_Reservas.PNG)
+![Interfaz de Pagina para administrador](Sistema/assets/Pagina_Admin_Clientes.PNG)

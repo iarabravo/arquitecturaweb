@@ -1,0 +1,76 @@
+URL: https:(protocol) //localhost(host) :4000(port) /api(path) ?a=1(query)
+
+GET: Obtiene información.
+http://localhost:4000/habitaciones (listar todas las habitaciones)
+http://localhost:4000/habitaciones?id=1 (mostrar los datos de la habitacion 1)
+http://localhost:4000/habitaciones?tipo=familiar (listar todas las habitaciones de tipo familiar)
+http://localhost:4000/habitaciones/disponibilidad?fechaInicio=2024-11-03&fechaFin=2024-11-04 (lista las habitaciones disponibles para esas fechas)
+http://localhost:4000/habitaciones/disponibilidad?fechaInicio=2024-11-03&fechaFin=2024-11-04&rooms=1&people=1 (lista las habitaciones disponibles para esas fechas con la capacidad y cantidad de habitaciones)
+http://localhost:4000/clientes (listar todos los clientes)
+http://localhost:4000/reservas (listar todas las reservas)
+
+POST: Envía y guarda nueva información.
+http://localhost:4000/habitaciones
+Body: {
+  "tipo": "individual",
+  "precio": 70000,
+  "capacidad": 1,
+  "disponible": 1
+}
+
+http://localhost:4000/clientes
+Body: {
+  "nombre": "Juan Pérez",
+  "apellido": "González",
+  "dni" : "222222",
+  "email": "juan.perez@example.com",
+  "telefono": "1234567890",
+  "direccion" : "asdsad1"
+}
+Response :{
+  "message": "Cliente creado exitosamente",
+  "clienteId": 456
+}
+
+http://localhost:4000/reservas
+Body: {
+    "clienteId": 1,
+    "habitacionId": 2,
+    "fechaInicio": "2024-09-23",
+    "fechaFin": "2024-09-25"
+}
+
+
+PUT: Actualiza toda la información existente.
+http://localhost:4000/habitaciones/1
+Body: {
+    "disponible": 1
+}
+http://localhost:4000/clientes/11
+Body: {
+    "email": "hernan.alvarez@email.com"
+}
+http://localhost:4000/reservas/2
+
+DELETE: Elimina información.
+http://localhost:4000/clientes/1
+http://localhost:4000/reservas/2
+http://localhost:4000/habitaciones/24
+
+Status CODES:
+100: indican que el request ha sido obtenido
+200: request fue procesado satisfactoriamente
+300: se requiere del cliente una acción adicional
+400: el server piensa que es error del cliente, request no está bien formado
+500: hubo un error del server al procesar el request
+
+Usar async para solicitudes a una API permite escribir código más limpio y fácil de leer, manejar errores de manera 
+eficiente y mejorar la experiencia del usuario al evitar bloqueos en la interfaz de la aplicación mientras se espera 
+la respuesta de la API.
+
+app.get('/api',function(req,res)){
+    get = metodo https
+    'api' = path
+    req = Contiene información sobre la solicitud del cliente
+    res = Se utiliza para enviar la respuesta al cliente
+}
