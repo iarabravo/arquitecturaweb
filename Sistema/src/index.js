@@ -22,6 +22,10 @@ app.get('/', function(request, response) {
     response.send("server funcionando!!");
 });
 
+//Este es un fragmento de código de una API en Node.js, utilizando Express.js para manejar rutas HTTP. 
+//La ruta /habitaciones es un endpoint que permite consultar habitaciones en una base de datos. 
+//Está diseñada para recibir varios parámetros de consulta (query parameters) y usarlos para filtrar habitaciones de acuerdo a ciertos criterios.
+
 app.get("/habitaciones", async (req, res) => {
     console.log("Ruta /habitaciones llamada");
     const connection = await database.getConnection();
