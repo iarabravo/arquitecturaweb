@@ -277,6 +277,36 @@ app.put("/habitaciones/:id", async (req, res) => {
     } 
 });
 
+app.post("/habitaciones", async (req, res) => {
+    console.log("Ruta /habitaciones (POST) llamada");
+
+    const connection = await database.getConnection();
+    const { tipo, precio, capacidad, disponible } = req.body;
+
+    // Validaciones de datos recibidos
+    if (!tipo || !precio || !capacidad) {
+        return res.status(400).json({ error: "Faltan datos requeridos (tipo, precio, capacidad)." });
+    }
+
+    try {
+        // Ajuste de la consulta SQL para incluir todos los campos
+        const query = `
+            INSERT INTO habitacion (tipo, precio, capacidad, disponible) 
+            VALUES (?, ?, ?, ?)
+        `;
+
+        const result = await connection.query(query, [tipo, precio, capacidad, disponible ?? 1]); // Por defecto disponible = 1
+        console.log("Habitación creada exitosamente");
+        res.status(201).json({
+            message: "Habitación creada exitosamente",
+            habitacionId: result.insertId,
+        });
+    } catch (error) {
+        console.error("Error al crear la habitación:", error);
+        res.status(500).json({ error: "Error al guardar la habitación en la base de datos." });
+    }
+});
+
 app.get("/clientes",async(req,res)=>
     {
         console.log("Ruta /clientes llamada"); // Verificar llamada a la ruta
